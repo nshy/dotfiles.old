@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+test -z "$1" && cat <<MSG
+Usage: `basename $0` dir1 dir2
+Changes recursively permissions
+  755 for directories
+  644 for files
+MSG
+
+for dir in "$@"; do
+  chmod -R a+r,u+w "$dir"
+  find "$dir" -type d -print0 | xargs -0 chmod a+x
+done

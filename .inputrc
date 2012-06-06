@@ -1,0 +1,23 @@
+set keymap vi
+j:backward-char
+k:next-history
+h:previous-history
+"g~":upcase-word
+"-":vi-arg-digit
+",u":"bg~"
+"\t":complete
+set keymap vi-insert
+"\C-a":upcase-word
+"\C-b":backward-word
+"\C-l":"\C-b\C-a"
+"\C-x\C-r":re-read-init-file
+
+#set visible-stats off
+#set mark-directories on
+#set show-all-if-ambiguous off
+#set meta-flag on
+set input-meta on
+set output-meta on
+set convert-meta off
+set completion-ignore-case on
+set editing-mode vi
