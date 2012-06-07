@@ -1,0 +1,13 @@
+#!/bin/bash
+mirror_file=/etc/setup/last-mirror
+
+if [ -z $1 ]; then
+  cat $mirror_file
+  exit
+fi
+
+case $1 in
+  ports) echo "ftp://ftp.cygwinports.org/pub/cygwinports" > $mirror_file ;;
+  main) echo "http://linux.rz.ruhr-uni-bochum.de/download/cygwin" > $mirror_file ;;
+  *) echo 'unknown mirror'
+esac
