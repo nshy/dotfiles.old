@@ -42,8 +42,12 @@ export GREP_OPTIONS='-siE --color'
 alias ls='ls -F'
 
 # less options
-# -i ignores cas
-export LESS='-i'
+# -i ignores case
+# -FX simply print one page files
+# -R enables colors
+# -S chop long lines
+# FRSX comes from man git-config
+export LESS='-iFRSX'
 
 # man options
 # TODO need a better solution
