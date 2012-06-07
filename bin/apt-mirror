@@ -2,12 +2,18 @@
 mirror_file=/etc/setup/last-mirror
 
 if [ -z $1 ]; then
-  cat $mirror_file
+  echo -n "Current mirror: "; cat $mirror_file
   exit
 fi
 
+function change_mirror()
+{
+  echo $1 > $mirror_file
+  echo "Switched to mirror: $1"
+}
+
 case $1 in
-  ports) echo "ftp://ftp.cygwinports.org/pub/cygwinports" > $mirror_file ;;
-  main) echo "http://linux.rz.ruhr-uni-bochum.de/download/cygwin" > $mirror_file ;;
+  ports) change_mirror "ftp://ftp.cygwinports.org/pub/cygwinports" ;;
+  main) change_mirror "http://linux.rz.ruhr-uni-bochum.de/download/cygwin" ;;
   *) echo 'unknown mirror'
 esac
