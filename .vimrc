@@ -91,6 +91,7 @@ let g:SuperTabLongestEnhanced=1
 let NERDTreeQuitOnOpen=1
 let NERDTreeIgnore = ['.exe$', '.o$', '.ico$', '.tif$', '.png',
 \				'.jpg', '.bmp', '.png$', '.dll$', '.gz$', '.a$']
+let NERDTreeShowHidden=1
 nnoremap <leader>t :NERDTreeToggle<CR>
 
 " buffer explorer
