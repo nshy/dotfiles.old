@@ -6,7 +6,7 @@ let mapleader=","
 call pathogen#infect()
 syntax on
 filetype plugin indent on
-" Ждем очень недолго key codes, так что ESC работает быстро при выходе из 
+" Ждем очень недолго key codes, так что ESC работает быстро при выходе из
 " command mode. Не должно вызывать проблем при работе в локальной консоли.
 set timeout ttimeoutlen=10
 
@@ -105,14 +105,14 @@ augroup buf-explorer-patch
   autocmd BufLeave \[BufExplorer\] nmap ds <Plug>Dsurround
 augroup END
 
-" syntax highlight bash specific readline commands
+
 let readline_has_bash="yes"
 
 " set autoindent
 
-augroup spaces 
+augroup spaces
   autocmd!
-  autocmd FileType ruby,eruby,yaml,sh setlocal tabstop=8 shiftwidth=2 softtabstop=2 expandtab
+  autocmd FileType ruby,eruby,yaml,sh,vim setlocal tabstop=8 shiftwidth=2 softtabstop=2 expandtab
   autocmd FileType c,h,make setlocal tabstop=8 shiftwidth=8 softtabstop=8 noexpandtab
 augroup END
 
@@ -125,3 +125,22 @@ augroup END
 if filereadable(".lvimrc")
   so .lvimrc
 endif
+
+" wd per tab
+function! s:enter_buffer()
+  if exists("t:wd")
+    exec "cd" t:wd
+  else
+    let t:wd = getcwd()
+  endif
+endfunction
+
+function! s:leave_buffer()
+  let t:wd = getcwd()
+endfunction
+
+augroup wd-per-tab
+  autocmd!
+  autocmd TabEnter * call s:enter_buffer()
+  autocmd TabLeave * call s:leave_buffer()
+augroup END
