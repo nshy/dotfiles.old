@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 mirror_file=/etc/setup/last-mirror
 
 if [ -z $1 ]; then

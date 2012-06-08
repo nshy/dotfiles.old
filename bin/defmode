@@ -1,12 +1,15 @@
 #!/bin/bash
+## Usage: defmode DIR ...
+## Changes recursively permissions
+##   755 for directories
+##   644 for files
+
 set -e
 
-test -z "$1" && cat <<MSG
-Usage: `basename $0` dir1 dir2
-Changes recursively permissions
-  755 for directories
-  644 for files
-MSG
+test -z "$1" -o $"$1" = "--help" && {
+  cat $0 | grep ^## | cut -c4- 1>&2
+  exit 1
+}
 
 for dir in "$@"; do
   chmod -R a+r,u+w "$dir"
