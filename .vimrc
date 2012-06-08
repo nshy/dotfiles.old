@@ -105,6 +105,9 @@ augroup buf-explorer-patch
   autocmd BufLeave \[BufExplorer\] nmap ds <Plug>Dsurround
 augroup END
 
+" syntax highlight bash specific readline commands
+let readline_has_bash="yes"
+
 " set autoindent
 
 augroup spaces 
