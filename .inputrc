@@ -11,6 +11,13 @@ set keymap vi-insert
 "\C-b":backward-word
 "\C-l":"\C-b\C-a"
 "\C-x\C-r":re-read-init-file
+"\C-xa":alias-expand-line
+"\C-xh":history-expand-line
+"\C-xs":shell-expand-line
+"\C-xt":tilde-expand
+"\C-xg":glob-expand-word
+"\C-xp":glob-list-expansions
+
 
 #set visible-stats off
 #set mark-directories on
