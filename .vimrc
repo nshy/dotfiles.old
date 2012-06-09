@@ -91,11 +91,13 @@ nnoremap <leader>t :TagbarToggle<CR>
 "nnoremap <leader>t :TlistToggle<CR>
 "nnoremap <leader>m :MarksBrowser<CR>
 imap <C-l> <ESC>bg~wea
-cmap w!! w !sudo tee % >/dev/null
 
 " abbreviations
 " h expands to vert help
-cnoreabbrev <expr> h ((getcmdtype() is# ':' && getcmdline() is# 'h')?('vert h'):('h'))
+cnoreabbrev <expr> h ((getcmdtype() == ':' && getcmdline() == 'h')
+                          \?('vert h'):('h'))
+cnoreabbrev <expr> w!! ((getcmdtype() == ':' && getcmdline() == 'w!!')
+                          \?('!sudo tee % >/dev/null'):('w!!'))
 
 " Tagbar
 let g:tagbar_left=1
@@ -118,7 +120,7 @@ let g:SuperTabLongestEnhanced=1
 " NERDTree
 let NERDTreeQuitOnOpen=1
 let NERDTreeIgnore = ['.exe$', '.o$', '.ico$', '.tif$', '.png',
-\				'.jpg', '.bmp', '.png$', '.dll$', '.gz$', '.a$']
+                        \'.jpg', '.bmp', '.png$', '.dll$', '.gz$', '.a$']
 let NERDTreeShowHidden=1
 
 " buffer explorer
