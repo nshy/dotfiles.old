@@ -82,14 +82,34 @@ nnoremap <leader>sv :so ~/.vimrc<CR>
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 nnoremap <leader>l :set list!<CR>
 nnoremap <leader>u g~iwe
-nnoremap <leader>t :tabedit<CR>
+nnoremap <leader>ct :tabedit<CR>
 nnoremap <leader>b :BufExplorer<CR>
 nnoremap <leader>f :NERDTreeToggle<CR>
 nnoremap <leader>p o<ESC>p==
 nnoremap <leader>P O<ESC>p==
+nnoremap <leader>t :TagbarToggle<CR>
+"nnoremap <leader>t :TlistToggle<CR>
 "nnoremap <leader>m :MarksBrowser<CR>
 imap <C-l> <ESC>bg~wea
 cmap w!! w !sudo tee % >/dev/null
+
+" abbreviations
+" h expands to vert help
+cnoreabbrev <expr> h ((getcmdtype() is# ':' && getcmdline() is# 'h')?('vert h'):('h'))
+
+" Tagbar
+let g:tagbar_left=1
+let g:tagbar_autoclose=1
+let g:tagbar_compact=1
+
+" TagList
+let Tlist_Show_One_File=1
+let Tlist_Close_On_Select=1
+let Tlist_Compact_Format=1
+let Tlist_Exit_OnlyWindow=1
+let Tlist_GainFocus_On_ToggleOpen=1
+let Tlist_Highlight_Tag_On_BufEnter=1
+let Tlist_Enable_Fold_Column=0
 
 " Supertab
 let g:SuperTabDefaultCompletionType="<c-n>"
