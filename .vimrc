@@ -1,20 +1,13 @@
-set nocompatible
-let mapleader=","
-
 " pathogen
 "call pathogen#infect('$VIM/vimfiles/bundle')
 call pathogen#infect()
+
 syntax on
 filetype plugin indent on
 " Ждем очень недолго key codes, так что ESC работает быстро при выходе из
 " command mode. Не должно вызывать проблем при работе в локальной консоли.
+set nocompatible
 set timeout ttimeoutlen=10
-
-" colemak
-noremap j h
-noremap h gk
-noremap k gj
-
 "set visualbell
 set noerrorbells
 set title
@@ -60,14 +53,19 @@ set switchbuf=useopen
 set gdefault
 set formatoptions=qrn1
 
+" My key mappings
+
+" colemak
+noremap j h
+noremap h gk
+noremap k gj
+noremap zh zk
+noremap zk zj
+
 nnoremap <C-j> <C-w>h
 nnoremap <C-l> <C-w>l
 nnoremap <C-h> <C-w>k
 nnoremap <C-k> <C-w>j
-cmap w!! w !sudo tee % >/dev/null
-nnoremap <leader><space> :nohlsearch<CR>
-nmap <silent> <leader>/ :set hlsearch!<CR>
-nmap <leader>p :setlocal paste! paste?<CR>
 nnoremap / /\v
 vnoremap / /\v
 nnoremap ; :
@@ -75,13 +73,23 @@ vnoremap ; :
 nnoremap q; q:
 nnoremap <tab> %
 vnoremap <tab> %
+let mapleader=","
+nmap <silent> <leader>/ :set hlsearch!<CR>
+nmap <leader>p :setlocal paste! paste?<CR>
 nnoremap <leader>w <C-w>v<C-w>l
 nnoremap <leader>ev :e ~/.vimrc<CR>
 nnoremap <leader>sv :so ~/.vimrc<CR>
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 nnoremap <leader>l :set list!<CR>
 nnoremap <leader>u g~iwe
+nnoremap <leader>t :tabedit<CR>
+nnoremap <leader>b :BufExplorer<CR>
+nnoremap <leader>f :NERDTreeToggle<CR>
+nnoremap <leader>p o<ESC>p==
+nnoremap <leader>P O<ESC>p==
+"nnoremap <leader>m :MarksBrowser<CR>
 imap <C-l> <ESC>bg~wea
+cmap w!! w !sudo tee % >/dev/null
 
 " Supertab
 let g:SuperTabDefaultCompletionType="<c-n>"
@@ -92,12 +100,10 @@ let NERDTreeQuitOnOpen=1
 let NERDTreeIgnore = ['.exe$', '.o$', '.ico$', '.tif$', '.png',
 \				'.jpg', '.bmp', '.png$', '.dll$', '.gz$', '.a$']
 let NERDTreeShowHidden=1
-nnoremap <leader>t :NERDTreeToggle<CR>
 
 " buffer explorer
 let g:bufExplorerShowRelativePath=1
 let g:bufExplorerSplitOutPathName=1
-nnoremap <leader>b :BufExplorer<CR>
 " Michael Henry from Yahoo Groups 94310
 augroup buf-explorer-patch
   autocmd!
