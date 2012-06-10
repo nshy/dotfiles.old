@@ -97,7 +97,7 @@ imap <C-l> <ESC>bg~wea
 cnoreabbrev <expr> h ((getcmdtype() == ':' && getcmdline() == 'h')
                           \?('vert h'):('h'))
 cnoreabbrev <expr> w!! ((getcmdtype() == ':' && getcmdline() == 'w!!')
-                          \?('!sudo tee % >/dev/null'):('w!!'))
+                          \?('w !sudo tee % >/dev/null'):('w!!'))
 
 " Tagbar
 let g:tagbar_left=1
