@@ -128,9 +128,14 @@ let g:bufExplorerShowRelativePath=1
 let g:bufExplorerSplitOutPathName=1
 let g:bufExplorerDefaultMappings=0
 " Michael Henry from Yahoo Groups 94310
+function s:unmap_surround()
+  if maparg("ds")
+    nunmap ds
+  end
+endfunction
 augroup buf-explorer-patch
   autocmd!
-  autocmd BufEnter \[BufExplorer\] nunmap ds
+  autocmd BufEnter \[BufExplorer\] call s:unmap_surround() 
   autocmd BufLeave \[BufExplorer\] nmap ds <Plug>Dsurround
 augroup END
 
