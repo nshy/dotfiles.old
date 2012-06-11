@@ -126,6 +126,7 @@ let NERDTreeShowHidden=1
 " buffer explorer
 let g:bufExplorerShowRelativePath=1
 let g:bufExplorerSplitOutPathName=1
+let g:bufExplorerDefaultMappings=0
 " Michael Henry from Yahoo Groups 94310
 augroup buf-explorer-patch
   autocmd!
