@@ -1,5 +1,5 @@
 " pathogen
-"call pathogen#infect('$VIM/vimfiles/bundle')
+runtime bundle/vim-pathogen/autoload/pathogen.vim
 call pathogen#infect()
 
 syntax on
