@@ -97,6 +97,19 @@ let g:EasyMotion_mapping_t='t'
 let g:EasyMotion_mapping_T='T'
 let g:EasyMotion_mapping_j='<leader>k'
 let g:EasyMotion_mapping_k='<leader>h'
+nnoremap <leader>; ;
+vnoremap <leader>; ;
+vnoremap <leader>, ,
+vnoremap <leader>, ,
+nnoremap <leader>f f
+vnoremap <leader>f f
+nnoremap <leader>F F
+vnoremap <leader>F F
+nnoremap <leader>t t
+vnoremap <leader>t t
+nnoremap <leader>T T
+vnoremap <leader>T T
+
 " is there a bug? default mappings seem to ignore iskeyword
 nnoremap w /\v(<.\|^$)<CR>
 vnoremap w /\v(<.\|^$)<CR>
@@ -144,7 +157,7 @@ let g:bufExplorerShowRelativePath=1
 let g:bufExplorerSplitOutPathName=1
 let g:bufExplorerDefaultMappings=0
 " Michael Henry from Yahoo Groups 94310
-augroup buf-explorer-patch
+augroup buf_explorer_patch
   autocmd!
   autocmd BufEnter \[BufExplorer\] if maparg("ds") | nunmap ds | endif
   autocmd BufLeave \[BufExplorer\] nmap ds <Plug>Dsurround
