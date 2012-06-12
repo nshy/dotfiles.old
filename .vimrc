@@ -95,8 +95,8 @@ let g:EasyMotion_mapping_f='f'
 let g:EasyMotion_mapping_F='F'
 let g:EasyMotion_mapping_t='t'
 let g:EasyMotion_mapping_T='T'
-let g:EasyMotion_mapping_j='k'
-let g:EasyMotion_mapping_k='h'
+let g:EasyMotion_mapping_j='<leader>k'
+let g:EasyMotion_mapping_k='<leader>h'
 
 " abbreviations
 " h expands to vert help
