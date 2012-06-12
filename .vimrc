@@ -76,21 +76,25 @@ vnoremap <tab> %
 let mapleader=","
 nmap <silent> <leader>/ :set hlsearch!<CR>
 nmap <leader>p :setlocal paste! paste?<CR>
-nnoremap <leader>w <C-w>v<C-w>l
-nnoremap <leader>ev :e ~/.vimrc<CR>
-nnoremap <leader>sv :so ~/.vimrc<CR>
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 nnoremap <leader>l :set list!<CR>
 nnoremap <leader>u g~iwe
-nnoremap <leader>ct :tabedit<CR>
-nnoremap <leader>b :BufExplorer<CR>
+nnoremap <leader>r :BufExplorer<CR>
 nnoremap <leader>f :NERDTreeToggle<CR>
 nnoremap <leader>p o<ESC>p==
 nnoremap <leader>P O<ESC>p==
 nnoremap <leader>t :TagbarToggle<CR>
+nnoremap <leader>zv :e ~/.vimrc<CR>
+nnoremap <leader>zr :so ~/.vimrc<CR>
+nnoremap <leader>zt :tabedit<CR>
+nnoremap <leader>zw <C-w>v<C-w>l
 "nnoremap <leader>t :TlistToggle<CR>
 "nnoremap <leader>m :MarksBrowser<CR>
 imap <C-l> <ESC>bg~wea
+let g:EasyMotion_mapping_f='f'
+let g:EasyMotion_mapping_F='F'
+let g:EasyMotion_mapping_t='t'
+let g:EasyMotion_mapping_T='T'
 
 " abbreviations
 " h expands to vert help
@@ -98,6 +102,9 @@ cnoreabbrev <expr> h ((getcmdtype() == ':' && getcmdline() == 'h')
                           \?('vert h'):('h'))
 cnoreabbrev <expr> w!! ((getcmdtype() == ':' && getcmdline() == 'w!!')
                           \?('w !sudo tee % >/dev/null'):('w!!'))
+
+" easymotion
+let g:EasyMotion_leader_key='<leader>'
 
 " Tagbar
 let g:tagbar_left=1
