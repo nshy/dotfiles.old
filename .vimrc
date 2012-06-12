@@ -41,7 +41,7 @@ set noinfercase
 set completeopt=menu,preview,longest
 set wildmode=longest,list
 "set shell=$MSYS\bin\sh.exe\ --login
-"set shellcmdflag=-c
+"set sHELLCMDFLag=-c
 "
 "Хинты с How I boosted my Vim
 set hidden
@@ -95,6 +95,8 @@ let g:EasyMotion_mapping_f='f'
 let g:EasyMotion_mapping_F='F'
 let g:EasyMotion_mapping_t='t'
 let g:EasyMotion_mapping_T='T'
+let g:EasyMotion_mapping_j='k'
+let g:EasyMotion_mapping_k='h'
 
 " abbreviations
 " h expands to vert help
