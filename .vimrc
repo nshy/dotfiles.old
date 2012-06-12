@@ -97,6 +97,13 @@ let g:EasyMotion_mapping_t='t'
 let g:EasyMotion_mapping_T='T'
 let g:EasyMotion_mapping_j='<leader>k'
 let g:EasyMotion_mapping_k='<leader>h'
+" is there a bug? default mappings seem to ignore iskeyword
+nnoremap w /\v(<.\|^$)<CR>
+vnoremap w /\v(<.\|^$)<CR>
+nnoremap e /\v(.>\|^$)<CR>
+vnoremap e /\v(.>\|^$)<CR>
+nnoremap b ?\v(<.\|^$)<CR>
+vnoremap b ?\v(<.\|^$)<CR>
 
 " abbreviations
 " h expands to vert help
