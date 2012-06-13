@@ -67,15 +67,6 @@ noremap k gj
 noremap zh zk
 noremap zk zj
 
-" FIXME temporarily, should be in core vim after bugfix
-" is there a bug? default mappings seem to ignore iskeyword
-" nnoremap w /\v(<.\|^$)<CR>
-" vnoremap w /\v(<.\|^$)<CR>
-" nnoremap e /\v(.>\|^$)<CR>
-" vnoremap e /\v(.>\|^$)<CR>
-" nnoremap b ?\v(<.\|^$)<CR>
-" vnoremap b ?\v(<.\|^$)<CR>
-
 " mappings that change default ones
 nnoremap <C-j> <C-w>h
 nnoremap <C-l> <C-w>l
@@ -89,25 +80,8 @@ nnoremap q; q:
 nnoremap <tab> %
 vnoremap <tab> %
 
-" let's try a configuration
-" when easymotion fFtT are fast
-" and default ones are slower to type
-" by the way we make default ,; reachable
-" again
-" let g:EasyMotion_mapping_f='f'
-" let g:EasyMotion_mapping_F='F'
-" let g:EasyMotion_mapping_t='t'
-" let g:EasyMotion_mapping_T='T'
 nnoremap <leader>; ;
 vnoremap <leader>; ;
-" nnoremap <leader>f f
-" vnoremap <leader>f f
-" nnoremap <leader>F F
-" vnoremap <leader>F F
-" nnoremap <leader>t t
-" vnoremap <leader>t t
-" nnoremap <leader>T T
-" vnoremap <leader>T T
 
 " fast leader mappings
 " fFtTwWbBeE are occupied by easymotion
