@@ -53,10 +53,7 @@ set undofile
 set switchbuf=useopen
 " hints from coming home to vim
 set gdefault
-" atc - misc autowrapping
-" n for numbered lists
-" qrc for handling comments
-set formatoptions=qrcn1at
+set formatoptions=qrn1
 
 " My key mappings
 
@@ -72,12 +69,12 @@ noremap zk zj
 
 " FIXME temporarily, should be in core vim after bugfix
 " is there a bug? default mappings seem to ignore iskeyword
-nnoremap w /\v(<.\|^$)<CR>
-vnoremap w /\v(<.\|^$)<CR>
-nnoremap e /\v(.>\|^$)<CR>
-vnoremap e /\v(.>\|^$)<CR>
-nnoremap b ?\v(<.\|^$)<CR>
-vnoremap b ?\v(<.\|^$)<CR>
+" nnoremap w /\v(<.\|^$)<CR>
+" vnoremap w /\v(<.\|^$)<CR>
+" nnoremap e /\v(.>\|^$)<CR>
+" vnoremap e /\v(.>\|^$)<CR>
+" nnoremap b ?\v(<.\|^$)<CR>
+" vnoremap b ?\v(<.\|^$)<CR>
 
 " mappings that change default ones
 nnoremap <C-j> <C-w>h
@@ -134,7 +131,7 @@ nnoremap <leader><leader>p :setlocal paste! paste?<CR>
 nnoremap <leader><leader>t :tabedit<CR>
 nnoremap <leader><leader>w <C-w>v<C-w>l
 " strip trailing whitespaces
-nnoremap <leader><leader>s :%s/\s\+$//<cr>:let @/=''<CR>
+nnoremap <leader><leader>s :%s/\s\+$//<CR>:let @/=''<CR>
 nnoremap <leader><leader>l :set list!<CR>
 
 " put under <leader>z misc stuff that i will not need
@@ -202,12 +199,6 @@ augroup spaces
   autocmd FileType ruby,eruby,yaml,sh,vim setlocal tabstop=8 shiftwidth=2 softtabstop=2 expandtab
   autocmd FileType c,h,make setlocal tabstop=8 shiftwidth=8 softtabstop=8 noexpandtab
 augroup END
-
-augroup misc
-  autocmd!
-  autocmd FocusLost * :wa
-augroup END
-
 
 if filereadable(".lvimrc")
   so .lvimrc
