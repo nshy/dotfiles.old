@@ -13,6 +13,8 @@ set noerrorbells
 set title
 set listchars=tab:>\ ,eol:$,nbsp:.,extends:#,trail:!
 set nowrap
+set showbreak=…
+set linebreak
 set incsearch
 set ignorecase
 set nohlsearch
@@ -51,7 +53,10 @@ set undofile
 set switchbuf=useopen
 " hints from coming home to vim
 set gdefault
-set formatoptions=qrn1
+" atc - misc autowrapping
+" n for numbered lists
+" qrc for handling comments
+set formatoptions=qrcn1at
 
 " My key mappings
 
