@@ -55,6 +55,9 @@ set formatoptions=qrn1
 
 " My key mappings
 
+" Very useful mapping must be
+" as little keypressings as possible
+
 " colemak
 noremap j h
 noremap h gk
@@ -62,6 +65,16 @@ noremap k gj
 noremap zh zk
 noremap zk zj
 
+" FIXME temporarily, should be in core vim after bugfix
+" is there a bug? default mappings seem to ignore iskeyword
+nnoremap w /\v(<.\|^$)<CR>
+vnoremap w /\v(<.\|^$)<CR>
+nnoremap e /\v(.>\|^$)<CR>
+vnoremap e /\v(.>\|^$)<CR>
+nnoremap b ?\v(<.\|^$)<CR>
+vnoremap b ?\v(<.\|^$)<CR>
+
+" mappings that change default ones
 nnoremap <C-j> <C-w>h
 nnoremap <C-l> <C-w>l
 nnoremap <C-h> <C-w>k
@@ -73,50 +86,61 @@ vnoremap ; :
 nnoremap q; q:
 nnoremap <tab> %
 vnoremap <tab> %
-let mapleader=","
-nmap <silent> <leader>/ :set hlsearch!<CR>
-nmap <leader>p :setlocal paste! paste?<CR>
-nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
-nnoremap <leader>l :set list!<CR>
-nnoremap <leader>u g~iwe
-nnoremap <leader>r :BufExplorer<CR>
-nnoremap <leader>f :NERDTreeToggle<CR>
-nnoremap <leader>p o<ESC>p==
-nnoremap <leader>P O<ESC>p==
-nnoremap <leader>t :TagbarToggle<CR>
-nnoremap <leader>zv :e ~/.vimrc<CR>
-nnoremap <leader>zr :so ~/.vimrc<CR>
-nnoremap <leader>zt :tabedit<CR>
-nnoremap <leader>zw <C-w>v<C-w>l
-"nnoremap <leader>t :TlistToggle<CR>
-"nnoremap <leader>m :MarksBrowser<CR>
-imap <C-l> <ESC>bg~wea
-let g:EasyMotion_mapping_f='f'
-let g:EasyMotion_mapping_F='F'
-let g:EasyMotion_mapping_t='t'
-let g:EasyMotion_mapping_T='T'
-let g:EasyMotion_mapping_j='<leader>k'
-let g:EasyMotion_mapping_k='<leader>h'
+
+" let's try a configuration
+" when easymotion fFtT are fast
+" and default ones are slower to type
+" by the way we make default ,; reachable
+" again
+" let g:EasyMotion_mapping_f='f'
+" let g:EasyMotion_mapping_F='F'
+" let g:EasyMotion_mapping_t='t'
+" let g:EasyMotion_mapping_T='T'
 nnoremap <leader>; ;
 vnoremap <leader>; ;
-vnoremap <leader>, ,
-vnoremap <leader>, ,
-nnoremap <leader>f f
-vnoremap <leader>f f
-nnoremap <leader>F F
-vnoremap <leader>F F
-nnoremap <leader>t t
-vnoremap <leader>t t
-nnoremap <leader>T T
-vnoremap <leader>T T
+" nnoremap <leader>f f
+" vnoremap <leader>f f
+" nnoremap <leader>F F
+" vnoremap <leader>F F
+" nnoremap <leader>t t
+" vnoremap <leader>t t
+" nnoremap <leader>T T
+" vnoremap <leader>T T
 
-" is there a bug? default mappings seem to ignore iskeyword
-nnoremap w /\v(<.\|^$)<CR>
-vnoremap w /\v(<.\|^$)<CR>
-nnoremap e /\v(.>\|^$)<CR>
-vnoremap e /\v(.>\|^$)<CR>
-nnoremap b ?\v(<.\|^$)<CR>
-vnoremap b ?\v(<.\|^$)<CR>
+" fast leader mappings
+" fFtTwWbBeE are occupied by easymotion
+let mapleader=","
+nmap <silent> <leader>/ :set hlsearch!<CR>
+" paste on new line and indent
+nnoremap <leader>p o<ESC>p==
+nnoremap <leader>P O<ESC>p==
+let g:EasyMotion_mapping_j='<leader>k'
+let g:EasyMotion_mapping_k='<leader>h'
+" for navigate
+" tAg
+nnoremap <leader>a :TagbarToggle<CR>
+" r for recent
+nnoremap <leader>r :BufExplorer<CR>
+" o for open
+nnoremap <leader>o :NERDTreeToggle<CR>
+
+" slower leader mappings
+nnoremap <leader><leader>p :setlocal paste! paste?<CR>
+nnoremap <leader><leader>t :tabedit<CR>
+nnoremap <leader><leader>w <C-w>v<C-w>l
+" strip trailing whitespaces
+nnoremap <leader><leader>s :%s/\s\+$//<cr>:let @/=''<CR>
+nnoremap <leader><leader>l :set list!<CR>
+
+" put under <leader>z misc stuff that i will not need
+" constantly 
+" v for vimfile
+nnoremap <leader>zv :e ~/.vimrc<CR>
+" r for reread
+nnoremap <leader>zr :so ~/.vimrc<CR>
+
+" insert mode mappings
+imap <C-l> <ESC>bg~wea
 
 " abbreviations
 " h expands to vert help
