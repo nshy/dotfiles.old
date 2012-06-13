@@ -161,7 +161,7 @@ let g:bufExplorerDefaultMappings=0
 " and mappings {rhs} too.
 augroup buf_explorer_patch
   autocmd!
-  autocmd BufEnter \[BufExplorer\] if maparg("ds") | nunmap ds| endif
+  autocmd BufEnter \[BufExplorer\] if maparg("ds") != "" | nunmap ds| endif
   autocmd BufLeave \[BufExplorer\] nmap ds <Plug>Dsurround
 augroup END
 
