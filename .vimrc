@@ -157,9 +157,11 @@ let g:bufExplorerShowRelativePath=1
 let g:bufExplorerSplitOutPathName=1
 let g:bufExplorerDefaultMappings=0
 " Michael Henry from Yahoo Groups 94310
+" TODO make less dependet on existing d* mappings assumption
+" and mappings {rhs} too.
 augroup buf_explorer_patch
   autocmd!
-  autocmd BufEnter \[BufExplorer\] if maparg("ds") | nunmap ds | endif
+  autocmd BufEnter \[BufExplorer\] if maparg("ds") | nunmap ds| endif
   autocmd BufLeave \[BufExplorer\] nmap ds <Plug>Dsurround
 augroup END
 
