@@ -1,6 +1,8 @@
 " pathogen
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 call pathogen#infect()
+" set leader eary or it could be the source of wtf
+let mapleader=","
 
 syntax on
 filetype plugin indent on
@@ -80,12 +82,10 @@ nnoremap q; q:
 nnoremap <tab> %
 vnoremap <tab> %
 
-nnoremap <leader>; ;
-vnoremap <leader>; ;
-
 " fast leader mappings
 " fFtTwWbBeE are occupied by easymotion
-let mapleader=","
+nnoremap <leader>; ;
+vnoremap <leader>; ;
 nmap <silent> <leader>/ :set hlsearch!<CR>
 " paste on new line and indent
 nnoremap <leader>p o<ESC>p==
