@@ -74,8 +74,6 @@ nnoremap <C-j> <C-w>h
 nnoremap <C-l> <C-w>l
 nnoremap <C-h> <C-w>k
 nnoremap <C-k> <C-w>j
-nnoremap / /\v
-vnoremap / /\v
 nnoremap ; :
 vnoremap ; :
 nnoremap q; q:
