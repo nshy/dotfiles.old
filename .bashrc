@@ -23,7 +23,12 @@ export LC_COLLATE="ru_RU.utf8"
 export CTAGS="--c-kinds=+px"
 
 # Set glob options
+# globstar enables **
+# dotglob * captures dotfies
+# failglob stops execution if there no matches
 shopt -s dotglob globstar failglob
+# nullglob removes pattern if there no matches
+# extglob enables extended patterns
 shopt -u extglob nullglob
 
 # don't mind small misspellings
