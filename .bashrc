@@ -40,7 +40,7 @@ shopt -s histappend
 # -i ignores case
 # -s supress errors and warnings about filetypes
 # -E gives ERE syntax
-export GREP_OPTIONS='-siE --color'
+export GREP_OPTIONS='-siE --color=always'
 
 # ls options
 # -# shows up filetypes in names (/@* etc)
