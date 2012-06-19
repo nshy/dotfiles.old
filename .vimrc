@@ -97,6 +97,8 @@ nnoremap <leader>a :TagbarToggle<CR>
 nnoremap <leader>r :BufExplorer<CR>
 " o for open
 nnoremap <leader>o :NERDTreeToggle<CR>
+" m for make
+nnoremap <leader>m :silent make\|redraw!\|cc<CR>
 
 " slower leader mappings
 nnoremap <leader><leader>p :setlocal paste! paste?<CR>
@@ -122,6 +124,9 @@ cnoreabbrev <expr> h ((getcmdtype() == ':' && getcmdline() == 'h')
                           \?('vert h'):('h'))
 cnoreabbrev <expr> w!! ((getcmdtype() == ':' && getcmdline() == 'w!!')
                           \?('w !sudo tee % >/dev/null'):('w!!'))
+
+" gcc compiler options
+let g:compiler_gcc_ignore_unmatched_lines='yes'
 
 " easymotion
 let g:EasyMotion_leader_key='<leader>'
