@@ -8,8 +8,10 @@ h:previous-history
 "\t":complete
 set keymap vi-insert
 "\C-a":upcase-word
-"\C-b":backward-word
-"\C-l":"\C-b\C-a"
+"\C-z":vi-bword
+"\C-b":unix-word-rubout
+"\C-w":backward-kill-word
+"\C-l":"\C-z\C-a"
 "\C-x\C-r":re-read-init-file
 "\C-xa":alias-expand-line
 "\C-xh":history-expand-line
