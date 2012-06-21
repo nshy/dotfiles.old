@@ -10,6 +10,7 @@ if [[ $MINGW ]]; then
   export PS1='\e[32mMINGW\e[m \W $ '
   alias configure="configure --prefix=$MINGW_PATH"
 else
+  PATH=$PATH:/usr/lib
   export PS1='\W $ '
 fi
 
@@ -44,7 +45,7 @@ export GREP_OPTIONS='-siE --color=always'
 
 # ls options
 # -# shows up filetypes in names (/@* etc)
-alias ls='ls -F'
+alias ls='ls -F1 --group-directories-first'
 
 # less options
 # -i ignores case
