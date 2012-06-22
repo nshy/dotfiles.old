@@ -1,0 +1,26 @@
+# colemak in english and utf8 ytsuken in russian
+# switching by ctrl+shift
+alt_is_meta
+
+# caps-lock and esc are swapped
+		keycode		1 = Caps_Lock
+		keycode		58 = Escape
+
+		keycode		14 = Delete
+		keycode		15 = Tab
+		keycode		56 = Alt
+		keycode		28 = Return
+		keycode		42 = Shift
+		keycode		54 = Shift
+		keycode		29 = Control
+		keycode		97 = Control
+
+# layout switching
+	control	keycode		54 = AltGr_Lock
+altgr	control	keycode		54 = AltGr_Lock
+
+include "linux-keys-bare"
+include "colemak_pure.map"
+include "ytsuken.map"
+
+strings as usual
