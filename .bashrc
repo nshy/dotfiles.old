@@ -3,9 +3,8 @@
 [[ "$-" != *i* ]] && return
 
 export PS1='\W $ '
-PATH=$PATH:~/bin:~/.gem/ruby/1.9.1/bin
+PATH=$PATH:~/bin:
 
-#PS1=$'\e[01;35m\\W$\e[m'
 export EDITOR="vim"
 export LC_CTYPE="ru_RU.utf8"
 export LC_TIME="ru_RU.utf8"
@@ -50,3 +49,8 @@ export LESS='-iFRSX'
 
 # no programmable completion for now
 complete -r
+
+# CYGWIN specific
+[[ $(uname) =~ CYGWIN ]] && . .cygwin/bashrc 
+# Arch specific
+[[ $(uname) =~ Linux ]] && PATH=$PATH:~/.gem/ruby/1.9.1/bin
