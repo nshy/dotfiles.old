@@ -7,8 +7,8 @@ gomin()
   export CC='i686-pc-mingw32-gcc'
   # when change this line, change in gocyg() accordingly
   export PATH=.:${MINGW_PATH}/bin:$PATH
-  export PS1='\e[32mMINGW\e[m \W $ '
-  alias configure="\configure --prefix=$MINGW_PATH"
+  export PS1='\[\e[32m\]MINGW\[\e[m\] \W $ '
+  alias configure="./configure --prefix=$MINGW_PATH"
 }
 
 gocyg()
@@ -17,7 +17,7 @@ gocyg()
   export PATH=${PATH1/${MINGW_PATH}\/bin}
   export CC='gcc'
   export PS1='\W $ '
-  alias configure="\configure"
+  alias configure="./configure"
 }
 
 gocyg
