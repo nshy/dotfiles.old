@@ -27,6 +27,7 @@ dir=$1
 glob=$2
 tmp=`mktemp`
 
+trap 'rm "$tmp"' EXIT
 
 if [[ -z $dir ]]; then
   # this line copy to stdout comments at the top of the file till first blank line
@@ -82,5 +83,4 @@ do
   fi
 done < "$tmp"
 
-rm "$tmp"
 echo "Conversion finished successfully. $rn files renamed."
