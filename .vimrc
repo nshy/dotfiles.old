@@ -205,3 +205,4 @@ augroup wd-per-tab
 augroup END
 
 command! -complete=file -nargs=* SetCommand let b:run_command = <q-args>
+command! -nargs=0 ShowCommand echo b:run_command
