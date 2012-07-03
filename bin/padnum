@@ -13,12 +13,12 @@
 # GLOB should be quoted to pass trough shell
 
 # TODO Thing of better command arguments hanling
-# maybe 
+# maybe
 #
 # padnum 'dir/*.jpg'
 #   or
 # pannum dir/*.jpg
-# 
+#
 # instead of
 # padnum dir '*.jpg'
 
@@ -61,7 +61,7 @@ do
   if [[ $len -gt $width ]]; then
     width=$len
   fi
-done < "$tmp" 
+done < "$tmp"
 echo "Padding width is $width"
 
 declare -i rn=0 
