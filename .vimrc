@@ -99,6 +99,8 @@ nnoremap <leader>r :BufExplorer<CR>
 nnoremap <leader>o :NERDTreeToggle<CR>
 " m for make
 nnoremap <leader>m :silent make\|redraw!\|cc<CR>
+" e for execute
+nnoremap <leader>e :exe '!' . expand('%') . ' ' . b:run_command<CR>
 
 " slower leader mappings
 nnoremap <leader><leader>p :setlocal paste! paste?<CR>
@@ -201,3 +203,5 @@ augroup wd-per-tab
   autocmd TabEnter * call s:enter_buffer()
   autocmd TabLeave * call s:leave_buffer()
 augroup END
+
+command! -complete=file -nargs=* SetCommand let b:run_command = <q-args>
