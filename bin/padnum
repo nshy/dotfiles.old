@@ -1,5 +1,5 @@
 #!/bin/bash
-# Usage: PROGRAM_NAME DIR
+# Usage: PROGRAM_NAME DIR [GLOB]
 # Makes next conversion.
 #   file0.x     -> file000.x
 #   file1.x     -> file001.x
@@ -7,13 +7,34 @@
 #   file10.x    -> file010.x
 #   .....
 #   file100.x   -> file100.x
+# Prefix 'file' is determined as largest common prefix among files in DIR
 # Number field width is calculated automatically.
+# Optional GLOB gives possibility to handle only some files in DIR
+# GLOB should be quoted to pass trough shell
+
+# TODO Thing of better command arguments hanling
+# maybe 
+#
+# padnum 'dir/*.jpg'
+#   or
+# pannum dir/*.jpg
+# 
+# instead of
+# padnum dir '*.jpg'
 
 set -e
 dir=$1
+glob=$2
+tmp=`mktemp`
+
 
 if [[ -z $dir ]]; then
+  # this line copy to stdout comments at the top of the file till first blank line
+  # PROGRAM_NAME is replaced with the actual programm name
+  # first line is regarded as shebang and isn't send to output
+  # leading '# ' are stripped away
   sed -rn "/^\$/{g;p;q};s/# (.*)/\\1/;s/PROGRAM_NAME/$(basename $0)/;2h;3,\$H" $0
+  exit 1
 fi
 
 if [[ ! -d $dir ]]; then
@@ -22,34 +43,44 @@ if [[ ! -d $dir ]]; then
 fi
 
 cd "$dir"
-pos=0
+ls -1 $glob > "$tmp"
+width=0
+echo "$tmp"
 
-# determine pos
+# determine prefix
+pref=`sed -r ':a;N;s/(.*).*\n\1.*/\1/;ba' "$tmp"`
+pref_len=${#pref}
+echo "Suffix is '$pref'"
+
+# determine width
 while read file
 do
-  [[ $file =~ [[:digit:]]+ ]] || continue
+  [[ ${file:pref_len} =~ ^[[:digit:]]+ ]] || continue
   len=${#BASH_REMATCH}
-  if [[ $len -gt $pos ]]; then
-    pos=$len
+  if [[ $len -gt $width ]]; then
+    width=$len
   fi
-done < <(ls -1)
+done < "$tmp" 
+echo "Padding width is $width"
 
 declare -i rn=0 
+# should be enough length
+zeros='0000000000000000000000'
 # rename files
 while read file
 do
-  [[ $file =~ ^([^[:digit:]]*)([[:digit:]]+)([^[:digit:]]*)$ ]] || continue
-  pref=${BASH_REMATCH[1]}
-  num=${BASH_REMATCH[2]}
-  suf=${BASH_REMATCH[3]}
-  [[ $num =~ ^0*(.*)$ ]]
-  numd=${BASH_REMATCH[1]}
-  printf -v num2 "%.${pos}i" $numd
-  if [[ $num != $num2 ]]; then
-    file2="${pref}${num2}${suf}"
+  [[ ${file:pref_len} =~ ^([[:digit:]]+)([^[:digit:]]*)$ ]] || continue
+  num=${BASH_REMATCH[1]}
+  suf=${BASH_REMATCH[2]}
+
+  # mv if num width is less then
+  pad=$(( $width - ${#num} ))
+  if [[ $pad -gt 0 ]]; then
+    file2="${pref}${zeros:0:pad}${num}${suf}"
     mv $file $file2
     rn=rn+1
   fi
-done < <(ls -1)
+done < "$tmp"
 
+rm "$tmp"
 echo "Conversion finished successfully. $rn files renamed."
