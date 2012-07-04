@@ -1,4 +1,4 @@
-PATH=$PATH:/usr/lib
+PATH=$PATH:/usr/lib:~/bin/cygwin
 
 export MINGW_PATH='/usr/i686-pc-mingw32/sys-root/mingw'
 
