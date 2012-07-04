@@ -13,7 +13,7 @@ set timeout ttimeoutlen=10
 "set visualbell
 set noerrorbells
 set title
-set list listchars=tab:>\ ,nbsp:.,extends:#,trail:\ 
+set list listchars=tab:>\ ,nbsp:.,extends:#,trail:\>
 set nowrap
 set showbreak=…
 set linebreak
