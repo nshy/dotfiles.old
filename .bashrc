@@ -2,19 +2,8 @@
 #[ -z "$PS1" ] && return
 [[ "$-" != *i* ]] && return
 
-export MINGW_PATH='/usr/i686-pc-mingw32/sys-root/mingw'
-
-if [[ $MINGW ]]; then
-  export CC='i686-pc-mingw32-gcc'
-  export PATH=.:${MINGW_PATH}/bin:$PATH
-  export PS1='\e[32mMINGW\e[m \W $ '
-  alias configure="configure --prefix=$MINGW_PATH"
-else
-  PATH=$PATH:/usr/lib
-  export PS1='\W $ '
-fi
-
-PATH=$PATH:~/bin
+export PS1='\W $ '
+PATH=$PATH:~/bin:~/.gem/ruby/1.9.1/bin
 
 #PS1=$'\e[01;35m\\W$\e[m'
 export EDITOR="vim"
@@ -61,5 +50,3 @@ export LESS='-iFRSX'
 
 # no programmable completion for now
 complete -r
-
-# . /bin/ssh-agent-helper
