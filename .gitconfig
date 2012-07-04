@@ -3,6 +3,13 @@
 	status = auto
 	branch = auto
 	interactive = true
+[alias]
+	ls = ls-files
+	l = !git log --format=oneline --color=always | head
+	s = status
+	c = commit
+	d = diff
+	cm = commit -m
 [pack]
 	packSizeLimit = 2g
 [diff "astextplain"]
