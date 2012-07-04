@@ -8,6 +8,7 @@
 	lh = !git log --format=oneline --color=always | head
 	l = log --format=oneline --graph
 	s = status
+	ss = submodule
 	c = commit
 	d = diff
 	cm = commit -m
