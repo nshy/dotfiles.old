@@ -5,7 +5,8 @@
 	interactive = true
 [alias]
 	ls = ls-files
-	l = !git log --format=oneline --color=always | head
+	lh = !git log --format=oneline --color=always | head
+	l = log --format=oneline --graph
 	s = status
 	c = commit
 	d = diff
