@@ -1,2 +1,0 @@
-#!/bin/bash
-MINGW=yes exec bash
