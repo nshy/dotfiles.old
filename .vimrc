@@ -209,6 +209,22 @@ function! s:rm_bad_whitespace_matches()
   unlet w:bad_trail
 endfunction
 
+function! s:i_mode_bad_whitespace_matches()
+  if !exists("w:bad_trail")
+    return
+  endif
+  call matchdelete(w:bad_trail)
+  let w:bad_trail = matchadd("BadWhitespace", '\s\+\%#\@<!$')
+endfunction
+
+function! s:n_mode_bad_whitespace_matches()
+  if !exists("w:bad_trail")
+    return
+  endif
+  call matchdelete(w:bad_trail)
+  let w:bad_trail = matchadd("BadWhitespace", '\s\+$')
+endfunction
+
 " Mark bad cases of spaces
 augroup bad-spaces
   autocmd!
@@ -219,10 +235,8 @@ augroup bad-spaces
   autocmd BufEnter */doc/* call s:rm_bad_whitespace_matches()
 
   " Disable mark trailing whitespaces when in insert mode
-  autocmd InsertEnter * call matchdelete(w:bad_trail)
-  autocmd InsertEnter * let w:bad_trail = matchadd("BadWhitespace", '\s\+\%#\@<!$')
-  autocmd InsertLeave * call matchdelete(w:bad_trail)
-  autocmd InsertLeave * let w:bad_trail = matchadd("BadWhitespace", '\s\+$')
+  autocmd InsertEnter * call s:i_mode_bad_whitespace_matches()
+  autocmd InsertLeave * call s:n_mode_bad_whitespace_matches()
 augroup END
 " order is significant!
 colorscheme wombat256
