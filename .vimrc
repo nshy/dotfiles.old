@@ -172,12 +172,21 @@ augroup END
 
 let readline_has_bash="yes"
 
-" set autoindent
+" set color column
+augroup color-column
+  autocmd!
+  " value is from wombat256's CursorColumn
+  autocmd ColorScheme * highlight ColorColumn ctermbg=235
+  autocmd FileType ruby,sh,vim,c,h,make setlocal colorcolumn=80
+augroup END
 
+" set spaces
 augroup spaces
   autocmd!
-  autocmd FileType ruby,eruby,yaml,sh,vim setlocal tabstop=8 shiftwidth=2 softtabstop=2 expandtab
-  autocmd FileType c,h,make setlocal tabstop=8 shiftwidth=8 softtabstop=8 noexpandtab
+  autocmd FileType ruby,eruby,yaml,sh,vim setlocal tabstop=8
+              \ shiftwidth=2 softtabstop=2 expandtab
+  autocmd FileType c,h,make setlocal tabstop=8 shiftwidth=8
+              \ softtabstop=8 noexpandtab
 augroup END
 
 function! s:add_bad_whitespace_matches()
@@ -218,6 +227,7 @@ augroup END
 " order is significant!
 colorscheme wombat256
 call s:add_bad_whitespace_matches()
+
 
 
 if filereadable(".lvimrc")
