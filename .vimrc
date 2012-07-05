@@ -13,7 +13,7 @@ set timeout ttimeoutlen=10
 "set visualbell
 set noerrorbells
 set title
-set list listchars=tab:>\ ,nbsp:.,extends:#,trail:\>
+set listchars=tab:>\-,nbsp:.,extends:#,trail:\!
 set nowrap
 set showbreak=…
 set linebreak
@@ -27,7 +27,6 @@ set showcmd
 set autowriteall
 set textwidth=79
 set diffopt=filler,vertical
-colorscheme wombat256
 compiler! gcc
 set keymap=russian-colemak
 set iminsert=0
@@ -111,7 +110,7 @@ nnoremap <leader><leader>s :%s/\s\+$//<CR>:let @/=''<CR>
 nnoremap <leader><leader>l :set list!<CR>
 
 " put under <leader>z misc stuff that i will not need
-" constantly 
+" constantly
 " v for vimfile
 nnoremap <leader>zv :e ~/.vimrc<CR>
 " r for reread
@@ -180,6 +179,46 @@ augroup spaces
   autocmd FileType ruby,eruby,yaml,sh,vim setlocal tabstop=8 shiftwidth=2 softtabstop=2 expandtab
   autocmd FileType c,h,make setlocal tabstop=8 shiftwidth=8 softtabstop=8 noexpandtab
 augroup END
+
+function! s:add_bad_whitespace_matches()
+  if exists("w:bad_ts")
+    return
+  endif
+  " Mark mixing tab and spaces
+  let w:bad_ts = matchadd("BadWhitespace", '\t ')
+  let w:bad_st = matchadd("BadWhitespace", ' \t')
+  " Mark trailing whitespaces
+  let w:bad_trail = matchadd("BadWhitespace", '\s\+$')
+endfunction
+
+function! s:rm_bad_whitespace_matches()
+  call matchdelete(w:bad_ts)
+  call matchdelete(w:bad_st)
+  call matchdelete(w:bad_trail)
+  unlet w:bad_ts
+  unlet w:bad_st
+  unlet w:bad_trail
+endfunction
+
+" Mark bad cases of spaces
+augroup bad-spaces
+  autocmd!
+  autocmd ColorScheme * highlight BadWhitespace ctermbg=LightGreen
+
+  " On for all buffers except */doc/*
+  autocmd BufEnter * call s:add_bad_whitespace_matches()
+  autocmd BufEnter */doc/* call s:rm_bad_whitespace_matches()
+
+  " Disable mark trailing whitespaces when in insert mode
+  autocmd InsertEnter * call matchdelete(w:bad_trail)
+  autocmd InsertEnter * let w:bad_trail = matchadd("BadWhitespace", '\s\+\%#\@<!$')
+  autocmd InsertLeave * call matchdelete(w:bad_trail)
+  autocmd InsertLeave * let w:bad_trail = matchadd("BadWhitespace", '\s\+$')
+augroup END
+" order is significant!
+colorscheme wombat256
+call s:add_bad_whitespace_matches()
+
 
 if filereadable(".lvimrc")
   so .lvimrc
