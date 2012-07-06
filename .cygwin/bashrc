@@ -3,11 +3,13 @@ PATH=$PATH:/usr/lib:~/bin/cygwin
 export MINGW_PATH='/usr/i686-pc-mingw32/sys-root/mingw'
 
 pathadd=.:${MINGW_PATH}/bin
+manpathadd=/usr/i686-pc-mingw32/sys-root/mingw/share/man
 
 gomin()
 {
   export CC='i686-pc-mingw32-gcc'
   export PATH=$pathadd:$PATH
+  export MANPATH=$MANPATH:$manpathadd
   export PS1='\[\e[32m\]MINGW\[\e[m\] \W $ '
   alias configure="./configure --prefix=$MINGW_PATH"
 }
@@ -15,6 +17,7 @@ gomin()
 gocyg()
 {
   export PATH=${PATH/$pathadd}
+  export MANPATH=${MANPATH/$manpathadd}
 
   export CC='gcc'
   export PS1='\W $ '
