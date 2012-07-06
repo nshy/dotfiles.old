@@ -232,6 +232,7 @@ augroup bad-spaces
   autocmd!
 
   " On for all buffers except */doc/*
+  autocmd WinEnter * call s:add_bad_whitespace_matches()
   autocmd BufEnter * call s:add_bad_whitespace_matches()
   autocmd BufEnter */doc/* call s:rm_bad_whitespace_matches()
 
