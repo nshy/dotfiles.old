@@ -11,7 +11,10 @@
 	ss = submodule
 	c = commit
 	d = diff
+	ds = diff --staged
 	cm = commit -m
+	au = add -u
+	ap = add -p
 [pack]
 	packSizeLimit = 2g
 [diff "astextplain"]
