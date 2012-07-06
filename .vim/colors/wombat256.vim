@@ -284,6 +284,7 @@ call <SID>X("Todo",			"857b6f",	"",			"italic")
 			"Ignore
 
 " My addons
+call <SID>X("BadWhitespace",	"",			"77cc77",	"none")
 call <SID>X("ColorColumn",		"",			"2d2d2d",	"")
 
 hi! link VisualNOS	Visual

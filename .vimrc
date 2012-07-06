@@ -223,10 +223,13 @@ function! s:n_mode_bad_whitespace_matches()
   let w:bad_trail = matchadd("BadWhitespace", '\s\+$')
 endfunction
 
+" order is significant!
+colorscheme wombat256
+call s:add_bad_whitespace_matches()
+
 " Mark bad cases of spaces
 augroup bad-spaces
   autocmd!
-  autocmd ColorScheme * highlight BadWhitespace ctermbg=LightGreen
 
   " On for all buffers except */doc/*
   autocmd BufEnter * call s:add_bad_whitespace_matches()
@@ -236,9 +239,6 @@ augroup bad-spaces
   autocmd InsertEnter * call s:i_mode_bad_whitespace_matches()
   autocmd InsertLeave * call s:n_mode_bad_whitespace_matches()
 augroup END
-" order is significant!
-colorscheme wombat256
-call s:add_bad_whitespace_matches()
 
 
 
