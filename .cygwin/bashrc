@@ -8,6 +8,7 @@ manpathadd=/usr/i686-pc-mingw32/sys-root/mingw/share/man
 gomin()
 {
   export CC='i686-pc-mingw32-gcc'
+  export CXX='i686-pc-mingw32-g++'
   export PATH=$pathadd:$PATH
   export MANPATH=$MANPATH:$manpathadd
   export PS1='\[\e[32m\]MINGW\[\e[m\] \W $ '
@@ -20,6 +21,7 @@ gocyg()
   export MANPATH=${MANPATH/$manpathadd}
 
   export CC='gcc'
+  export CXX='g++'
   export PS1='\W $ '
   alias configure="./configure"
 }
