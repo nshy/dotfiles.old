@@ -175,8 +175,6 @@ let readline_has_bash="yes"
 " set color column
 augroup color-column
   autocmd!
-  " value is from wombat256's CursorColumn
-  autocmd ColorScheme * highlight ColorColumn ctermbg=235
   autocmd FileType ruby,sh,vim,c,h,make setlocal colorcolumn=80
 augroup END
 
