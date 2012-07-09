@@ -1,6 +1,7 @@
 PATH=$PATH:/usr/lib:~/bin/cygwin
 
 export MINGW_PATH='/usr/i686-pc-mingw32/sys-root/mingw'
+export PKG_CONFIG_PATH="$MINGW_PATH/lib/pkgconfig"
 
 pathadd=.:${MINGW_PATH}/bin
 manpathadd=/usr/i686-pc-mingw32/sys-root/mingw/share/man
