@@ -1,5 +1,4 @@
 # Check for an interactive session
-#[ -z "$PS1" ] && return
 [[ "$-" != *i* ]] && return
 
 export PS1='\W $ '
@@ -29,7 +28,7 @@ shopt -s histappend
 # -i ignores case
 # -s supress errors and warnings about filetypes
 # -E gives ERE syntax
-export GREP_OPTIONS='-siE --color=always'
+alias grep='grep -siE --color=always'
 
 # ls options
 # -# shows up filetypes in names (/@* etc)
@@ -51,6 +50,6 @@ export LESS='-iFRSX'
 complete -r
 
 # CYGWIN specific
-[[ $(uname) =~ CYGWIN ]] && . .cygwin/bashrc 
+[[ $(uname) =~ CYGWIN ]] && . .cygwin/bashrc
 # Arch specific
 [[ $(uname) =~ Linux ]] && PATH=$PATH:~/.gem/ruby/1.9.1/bin
