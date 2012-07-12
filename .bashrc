@@ -53,3 +53,8 @@ complete -r
 [[ $(uname) =~ CYGWIN ]] && . .cygwin/bashrc
 # Arch specific
 [[ $(uname) =~ Linux ]] && PATH=$PATH:~/.gem/ruby/1.9.1/bin
+
+# history options
+HISTCONTROL=ignoreboth:ignorespace
+HISTFILESIZE=10000
+HISTSIZE=10000
