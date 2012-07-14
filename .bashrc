@@ -54,3 +54,7 @@ complete -r
 [[ $(uname) =~ CYGWIN ]] && . .cygwin/bashrc 
 # Arch specific
 [[ $(uname) =~ Linux ]] && PATH=$PATH:~/.gem/ruby/1.9.1/bin
+
+alias usb="mount /mnt/usb"
+alias nousb="umount /mnt/usb"
+alias rsyncp="rsync --progress"
