@@ -58,3 +58,7 @@ complete -r
 HISTCONTROL=ignoreboth:ignorespace
 HISTFILESIZE=10000
 HISTSIZE=10000
+
+alias usb="mount /mnt/usb"
+alias nousb="umount /mnt/usb"
+alias rsyncp="rsync --progress"
