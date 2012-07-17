@@ -59,6 +59,18 @@ HISTCONTROL=ignoreboth:ignorespace
 HISTFILESIZE=10000
 HISTSIZE=10000
 
+# command aliases
 alias usb="mount /mnt/usb"
 alias nousb="umount /mnt/usb"
 alias rsyncp="rsync --progress"
+
+# navigation aliases
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+
+# mark plugin
+. marks
+alias mark="mark_mark"
+alias go="mark_go"
+alias dirs="mark_ls"
