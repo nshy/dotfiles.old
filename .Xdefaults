@@ -5,6 +5,7 @@
 *VT100.utf8Fonts.font: -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*
 *VT100*metaSendsEscape: true
 XTerm*VT100.translations: #override <Btn1Up>: select-end(PRIMARY, CLIPBOARD, CUT_BUFFER0)
+XTerm*termName:         xterm-256color
 
 ! Taken from wombat256.vim Normal entry after snapping to pallete values
 XTerm*background: #1c1c1c
