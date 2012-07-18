@@ -1,0 +1,8 @@
+#!/bin/bash
+
+exec 5<>~/.vim/fifo
+
+vimfifo_echo()
+{
+  echo $* >&5
+}

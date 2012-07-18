@@ -100,6 +100,8 @@ nnoremap <leader>o :NERDTreeToggle<CR>
 nnoremap <leader>m :silent make\|redraw!\|cc<CR>
 " e for execute
 nnoremap <leader>e :exe '!' . expand('%') . ' ' . b:run_command<CR>
+" i resembles |
+nnoremap <leader>i :call <SID>open_file_from_pipe()<CR>
 
 " slower leader mappings
 nnoremap <leader><leader>p :setlocal paste! paste?<CR>
@@ -268,3 +270,13 @@ augroup END
 
 command! -complete=file -nargs=* SetCommand let b:run_command = <q-args>
 command! -nargs=0 ShowCommand echo b:run_command
+
+function! <SID>open_file_from_pipe()
+  " read -t 0 will be no good
+  let filename = system("exec 5<>~/.vim/fifo; read -t 0.001 filename <&5; echo -n \"$filename\"")
+  if strlen(filename) == 0
+    echo "Filename pipe is empty"
+  else
+    exec "e" filename
+  endif
+endfunction

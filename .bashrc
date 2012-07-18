@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Check for an interactive session
 [[ "$-" != *i* ]] && return
 
@@ -74,3 +76,6 @@ alias ....="cd ../../.."
 alias mark="mark_mark"
 alias go="mark_go"
 alias dirs="mark_ls"
+
+. .bash/vimfifo
+alias vimfifo="vimfifo_echo"
