@@ -60,7 +60,7 @@ complete -r
 HISTCONTROL=ignoreboth:ignorespace
 HISTFILESIZE=10000
 HISTSIZE=10000
-HISTIGNORE='ls:ls *:pushd:pushd *:mark *:popd:go *:dirs:fg:history'
+HISTIGNORE='ls:ls *:pushd:pushd *:mark *:popd:go *:dirs:fg:history:cd:cd *:exit:make'
 
 # command aliases
 alias usb="mount /mnt/usb"
