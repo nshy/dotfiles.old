@@ -103,7 +103,7 @@ mark_pop_dirs()
   do
     mark_dirs[i]=${mark_dirs[$(( i+1 ))]}
   done
-  unset 'mark_dirs[$(( s-1 ))]'
+  unset "mark_dirs[$(( s-1 ))]"
 }
 
 mark_popd()
@@ -128,7 +128,7 @@ mark_rotate_dirs()
     tmp[$i]=${mark_dirs[$is]}
   done
 
-  unset 'mark_dirs[@]'
+  unset "mark_dirs[@]"
 
   # copy tmp to mark_dirs
   for (( i=0 ; i<s; ++i ))
@@ -252,7 +252,7 @@ mark_mark()
   if [[ -n $mark_cur ]]
   then
     printf "Renaming position. Old name was '$mark_cur'\n"
-    unset 'mark_to_idx[$mark_cur]'
+    unset "mark_to_idx[$mark_cur]"
   fi
 
   mark_to_idx[$1]=0
