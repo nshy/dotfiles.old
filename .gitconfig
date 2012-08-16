@@ -12,6 +12,7 @@
 	c = commit
 	d = diff
 	ds = diff --staged
+	dc = diff --check
 	cm = commit -m
 	au = add -u
 	ap = add -p
