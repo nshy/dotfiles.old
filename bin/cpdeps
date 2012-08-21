@@ -1,0 +1,32 @@
+#!/bin/bash
+# Usage: PROGRAM_NAME [EXE [DIR]]
+#   Copy all non-windows dll dependencies of EXE to DIR
+
+set -e
+
+exe=${1:-app\.exe}
+dir=${2:-build}
+
+if [[ ! -x $exe ]]
+then
+  echo "Error: $exe is not an executable"
+fi
+
+if [[ ! -d $dir ]]
+then
+  echo "Error: $dir is not a directory"
+fi
+
+if [[ ! -d $dir || ! -x $exe ]]
+then
+  echo
+  sed -rn "/^\$/{g;p;q};s/# (.*)/\\1/;s/PROGRAM_NAME/$(basename $0)/;2h;3,\$H" $0
+  exit 1
+fi
+
+cygcheck "$exe" | \grep mingw | \
+  sed 's/\\/\//g;s/e:\/cygwin//i' - | while read file
+do
+  echo "$file"
+  cp "$file" "$dir"
+done
