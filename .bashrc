@@ -4,7 +4,7 @@
 [[ "$-" != *i* ]] && return
 
 export PS1='\W $ '
-PATH=$PATH:~/bin:
+PATH=$PATH:~/bin
 
 export EDITOR="vim"
 export LC_CTYPE="ru_RU.utf8"

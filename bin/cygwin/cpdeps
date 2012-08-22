@@ -4,6 +4,8 @@
 
 set -e
 
+. functions
+
 exe=${1:-app\.exe}
 dir=${2:-build}
 
@@ -20,7 +22,7 @@ fi
 if [[ ! -d $dir || ! -x $exe ]]
 then
   echo
-  sed -rn "/^\$/{g;p;q};s/# (.*)/\\1/;s/PROGRAM_NAME/$(basename $0)/;2h;3,\$H" $0
+  print_help "$0"
   exit 1
 fi
 

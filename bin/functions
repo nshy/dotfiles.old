@@ -1,0 +1,6 @@
+#!/bin/bash
+
+print_help()
+{
+  sed -rn "/^\$/{g;p;q};s/# (.*)/\\1/;s/PROGRAM_NAME/$(basename $1)/;2h;3,\$H" $1
+}

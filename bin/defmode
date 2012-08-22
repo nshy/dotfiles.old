@@ -1,13 +1,15 @@
 #!/bin/bash
-## Usage: defmode DIR ...
-## Changes recursively permissions
-##   755 for directories
-##   644 for files
+# Usage: PROGRAM_NAME DIR ...
+# Changes recursively permissions
+#   755 for directories
+#   644 for files
 
 set -e
 
+. functions
+
 test -z "$1" -o $"$1" = "--help" && {
-  cat $0 | grep ^## | cut -c4- 1>&2
+  print_help "$0"
   exit 1
 }
 

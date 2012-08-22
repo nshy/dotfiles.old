@@ -23,6 +23,8 @@
 # padnum dir '*.jpg'
 
 set -e
+
+. functions
 dir=$1
 glob=$2
 tmp=`mktemp`
@@ -30,11 +32,7 @@ tmp=`mktemp`
 trap 'rm "$tmp"' EXIT
 
 if [[ -z $dir ]]; then
-  # this line copy to stdout comments at the top of the file till first blank line
-  # PROGRAM_NAME is replaced with the actual programm name
-  # first line is regarded as shebang and isn't send to output
-  # leading '# ' are stripped away
-  sed -rn "/^\$/{g;p;q};s/# (.*)/\\1/;s/PROGRAM_NAME/$(basename $0)/;2h;3,\$H" $0
+  print_help "$0"
   exit 1
 fi
 
