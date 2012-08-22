@@ -293,6 +293,11 @@ mark_go()
     return
   fi
 
+  if [[ $l -eq 0 ]]
+  then
+    return
+  fi
+
   mark_pushd "+$l"
 }
 
