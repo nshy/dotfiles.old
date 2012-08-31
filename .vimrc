@@ -101,7 +101,7 @@ nnoremap <leader>m :silent make\|redraw!\|cc<CR>
 " s for start
 function! <SID>cmd_command()
   if !exists("w:cmd_command")
-    echo "Command to run is not set"
+    echoe "Command to run is not set"
     return
   endif
   if !exists("w:cmd_silent")
@@ -288,7 +288,7 @@ function! <SID>open_file_from_pipe()
   " read -t 0 will be no good
   let filename = system("read -t 0.001 filename <~/.vim/fifo; echo -n \"$filename\"")
   if strlen(filename) == 0
-    echo "Filename pipe is empty"
+    echoe "Filename pipe is empty"
   else
     exec "e" filename
   endif
