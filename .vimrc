@@ -99,11 +99,13 @@ nnoremap <leader>o :NERDTreeToggle<CR>
 " m for make
 nnoremap <leader>m :silent make\|redraw!\|cc<CR>
 " s for start
-let w:cmd_silent=0
 function! <SID>cmd_command()
   if !exists("w:cmd_command")
     echo "Command to run is not set"
     return
+  endif
+  if !exists("w:cmd_silent")
+    let w:cmd_silent=0
   endif
   let l:pref = w:cmd_silent ? 'silent !' : '!'
   exec l:pref . w:cmd_command
