@@ -98,8 +98,20 @@ nnoremap <leader>r :BufExplorer<CR>
 nnoremap <leader>o :NERDTreeToggle<CR>
 " m for make
 nnoremap <leader>m :silent make\|redraw!\|cc<CR>
-" e for execute
-nnoremap <leader>e :exe '!' . expand('%') . ' ' . b:run_command<CR>
+" s for start
+let w:cmd_silent=0
+function! <SID>cmd_command()
+  if !exists("w:cmd_command")
+    echo "Command to run is not set"
+    return
+  endif
+  let l:pref = w:cmd_silent ? 'silent !' : '!'
+  exec l:pref . w:cmd_command
+  if w:cmd_silent
+    redraw!
+  endif
+endfunction
+nnoremap <leader>s :call <SID>cmd_command()<CR>
 " i resembles |
 nnoremap <leader>i :call <SID>open_file_from_pipe()<CR>
 
@@ -245,9 +257,6 @@ augroup END
 
 
 
-if filereadable(".lvimrc")
-  so .lvimrc
-endif
 
 " wd per tab
 function! s:enter_buffer()
@@ -268,8 +277,10 @@ augroup wd-per-tab
   autocmd TabLeave * call s:leave_buffer()
 augroup END
 
-command! -complete=file -nargs=* SetCommand let b:run_command = <q-args>
-command! -nargs=0 ShowCommand echo b:run_command
+command! -complete=file -nargs=* CommandSet let w:cmd_command = <q-args>
+command! -nargs=0 CommandShow echo w:cmd_command
+command! -nargs=0 CommandSilent let w:cmd_silent=1
+command! -nargs=0 CommandVerbose let w:cmd_silent=0
 
 function! <SID>open_file_from_pipe()
   " read -t 0 will be no good
@@ -280,3 +291,7 @@ function! <SID>open_file_from_pipe()
     exec "e" filename
   endif
 endfunction
+
+if filereadable(".lvimrc")
+  so .lvimrc
+endif
