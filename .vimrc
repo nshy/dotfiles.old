@@ -98,10 +98,13 @@ nnoremap <leader>r :BufExplorer<CR>
 nnoremap <leader>o :NERDTreeToggle<CR>
 " m for make
 nnoremap <leader>m :silent make\|redraw!\|cc<CR>
+function! s:echo_err(msg)
+  echohl ErrorMsg | echo a:msg | echohl none
+endfunction
 " s for start
 function! <SID>cmd_command()
   if !exists("w:cmd_command")
-    echoe "Command to run is not set"
+    call s:echo_err("Command to run is not set")
     return
   endif
   if !exists("w:cmd_silent")
@@ -288,7 +291,7 @@ function! <SID>open_file_from_pipe()
   " read -t 0 will be no good
   let filename = system("read -t 0.001 filename <~/.vim/fifo; echo -n \"$filename\"")
   if strlen(filename) == 0
-    echoe "Filename pipe is empty"
+    call s:echo_err("Filename pipe is empty")
   else
     exec "e" filename
   endif
