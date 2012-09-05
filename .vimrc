@@ -191,6 +191,11 @@ augroup END
 
 let readline_has_bash="yes"
 
+augroup custom_syntax
+  autocmd!
+  autocmd BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl
+augroup END
+
 " set color column
 augroup color-column
   autocmd!
