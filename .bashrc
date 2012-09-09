@@ -34,7 +34,8 @@ alias grep='grep -siE --color=always'
 
 # ls options
 # -# shows up filetypes in names (/@* etc)
-alias ls='ls -F1 --group-directories-first'
+alias ls='ls -F1'
+alias lsd='ls -F1 --group-directories-first'
 
 # less options
 # -i ignores case
@@ -60,7 +61,7 @@ complete -r
 HISTCONTROL=ignoreboth:ignorespace
 HISTFILESIZE=10000
 HISTSIZE=10000
-HISTIGNORE='ls:ls *:pushd:pushd *:mark *:popd:go *:dirs:fg:history:cd:cd *:exit:make'
+HISTIGNORE='ls:pushd:pushd *:mark *:popd:go *:dirs:fg:history:cd:cd *:exit:make'
 
 # command aliases
 alias usb="mount /mnt/usb"
