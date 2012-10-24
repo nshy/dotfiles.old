@@ -127,6 +127,7 @@ nnoremap <leader><leader>w <C-w>v<C-w>l
 " strip trailing whitespaces
 nnoremap <leader><leader>s :%s/\s\+$//<CR>:let @/=''<CR>
 nnoremap <leader><leader>l :set list!<CR>
+nnoremap <leader><leader>d :redraw!<CR>
 
 " put under <leader>z misc stuff that i will not need
 " constantly
