@@ -1,0 +1,81 @@
+#!/bin/bash
+
+set -e
+
+LIST_DIR="/build/list/"
+INSTALL_PATH="/build/package"
+BUILD_PATH="/build/root"
+MINGW_PATH='/usr/i686-pc-mingw32/sys-root/mingw'
+
+install_on_exit()
+{
+  rm -rf "$tmp_unpack"
+}
+
+PACKAGE=$1
+
+# [ -z "$PACKAGE" ] && PACKAGE="mingw-jpeg"
+
+[ -z "$PACKAGE" ] && {
+  echo "ERROR: package not specified"
+  exit 1
+}
+
+# package is system-wide
+cygcheck -dc | grep "$PACKAGE" >&/dev/null && exit 0;
+
+trap 'install_on_exit' EXIT
+tmp_unpack=`mktemp -d`
+
+
+# check if we have package
+ls "$INSTALL_PATH" | grep "^$PACKAGE" >&/dev/null || {
+  echo "ERROR: package $PACKAGE not found"
+  exit 1
+}
+
+PACKAGE_FILE=("$INSTALL_PATH/$PACKAGE"*.tar.bz2)
+DESC_FILE=("$INSTALL_PATH/$PACKAGE"*.desc)
+PACKAGE_NAME=`basename "$PACKAGE_FILE"`
+LIST_NAME=${PACKAGE_NAME%.tar.bz2}.list
+LIST_FILE="$LIST_DIR/$LIST_NAME"
+
+# install all deps
+deps=`grep 'requires' $DESC_FILE`
+deps=${deps#requires:}
+for pack in $deps
+do
+  pk-install "$pack"
+done
+
+# check if package already installed
+[ -d "$LIST_DIR" ] || mkdir -p "$LIST_DIR"
+[ -f "$LIST_FILE" ] && exit 0;
+
+echo "install $PACKAGE_NAME"
+
+# extract package to tmp dir
+TMP_DIR="$tmp_unpack$MINGW_PATH"
+cat $PACKAGE_FILE | bunzip2 | tar xf - -C "$tmp_unpack"
+
+# cd to tmp dir
+PWD_SAVE=`pwd`
+cd "$TMP_DIR"
+
+# create file list
+find . -type f > "$LIST_FILE"
+
+# mv package to build dir
+tar c . | tar x -C "$BUILD_PATH"
+
+# restore original dir
+cd "$PWD_SAVE"
+
+shopt -s nullglob
+#fix .la and .pc files
+MINGW_PATH_SED=${MINGW_PATH//\//\\\/}
+BUILD_PATH_SED=${BUILD_PATH//\//\\\/}
+grep -l "$MINGW_PATH" "$BUILD_PATH"/lib/pkgconfig/*.pc "$BUILD_PATH"/lib/*.la | while read file
+do
+  sed -i -re "s/$MINGW_PATH_SED/$BUILD_PATH_SED/g" $file
+done

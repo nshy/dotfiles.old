@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -e
+
+LIST_DIR="/build/list/"
+INSTALL_PATH="/build/package"
+BUILD_PATH="/build/root"
+MINGW_PATH='/usr/i686-pc-mingw32/sys-root/mingw'
+
+PACKAGE=$1
+
+[ -z "$PACKAGE" ] && {
+  echo "ERROR: package not specified"
+  exit 1
+}
+
+# check if we have package
+ls "$LIST_DIR" | grep "$PACKAGE" >&/dev/null || {
+  echo "ERROR: package $PACKAGE not installed"
+  exit 1
+}
+
+echo "remove $PACKAGE"
+
+LIST_FILE=("$LIST_DIR/$PACKAGE"*.list)
+
+# cd to tmp dir
+PWD_SAVE=`pwd`
+cd "$BUILD_PATH"
+
+cat "$LIST_FILE" | while read file
+do
+  rm "$file"
+done
+
+rm "$LIST_FILE"
+
+# restore original dir
+cd "$PWD_SAVE"
