@@ -1,0 +1,8 @@
+#!/bin/bash
+
+BUILD_PATH="/build/root"
+
+set -e
+
+cd $BUILD_PATH
+rm `pk-new`

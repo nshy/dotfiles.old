@@ -28,7 +28,7 @@ SETUP_PATH=
 
 PACKAGE_FILE=("$SETUP_PATH/$PACKAGE/$PACKAGE"*)
 DESC_FILE="$SETUP_PATH/$PACKAGE/desc"
-PACKAGE_NAME=`basename "$PACKAGE_FILE"`
+PACKAGE_NAME=${PACKAGE_FILE##*/}
 
 deps=`grep 'requires' $DESC_FILE`
 deps=${deps#requires: }

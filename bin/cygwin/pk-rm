@@ -14,26 +14,13 @@ PACKAGE=$1
   exit 1
 }
 
-# check if we have package
-ls "$LIST_DIR" | grep "$PACKAGE" >&/dev/null || {
-  echo "ERROR: package $PACKAGE not installed"
-  exit 1
-}
+PACKAGE_NAME=`pk-find-fun "$PACKAGE" "$LIST_DIR" "list"`
 
-echo "remove $PACKAGE"
+LIST_FILE="$LIST_DIR/$PACKAGE_NAME.list"
 
-LIST_FILE=("$LIST_DIR/$PACKAGE"*.list)
+echo "remove $PACKAGE_NAME"
 
-# cd to tmp dir
-PWD_SAVE=`pwd`
 cd "$BUILD_PATH"
-
-cat "$LIST_FILE" | while read file
-do
-  rm "$file"
-done
+rm `cat "$LIST_FILE"`
 
 rm "$LIST_FILE"
-
-# restore original dir
-cd "$PWD_SAVE"

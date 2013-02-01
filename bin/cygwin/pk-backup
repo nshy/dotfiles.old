@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+INSTALL_PATH="/build/package"
+SRC_PATH="/build/src"
+BACKUP_PATH="/cygdrive/e/backup-net/"
+
+rsync_options='-av'
+rsync "$rsync_options" "$INSTALL_PATH" "$BACKUP_PATH"
+rsync "$rsync_options" "$SRC_PATH" "$BACKUP_PATH"

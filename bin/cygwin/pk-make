@@ -10,7 +10,6 @@ MINGW_PATH2='usr/i686-pc-mingw32/sys-root/mingw'
 make_on_exit()
 {
   rm -rf "$tmp_files"
-  rm -rf "$tmp_set"
 }
 
 PACKAGE=$1
@@ -26,24 +25,12 @@ grep 'requires:' "$DESC" >&/dev/null || { echo "ERROR: no deps in description"; 
 
 trap 'make_on_exit' EXIT
 tmp_files=`mktemp`
-tmp_set=`mktemp`
 
 DESC_FILE=`readlink -f $DESC`
 
-PWD_SAVE=`pwd`
 cd "$BUILD_PATH"
 
-# find all files in root
-find . -type f > "$tmp_files"
-
-# remove files from installed packages
-cd "$LIST_DIR"
-ls | while read file
-do
-  # set complement - files int $tmp_files that are not in $file
-  comm -23 <(sort "$tmp_files") <(sort "$file") > "$tmp_set"
-  cp "$tmp_set" "$tmp_files"
-done
+pk-new > "$tmp_files"
 
 [ `stat -c %s "$tmp_files"` = '0' ] && { echo "WARNING: no new files"; exit 0; }
 
@@ -54,6 +41,3 @@ tar -cjf "$INSTALL_PATH"/"$PACKAGE".tar.bz2 -T "$tmp_files" \
   --transform="s,^.,$MINGW_PATH2,"
 cp "$DESC_FILE" "$INSTALL_PATH"/"$PACKAGE".desc
 cp "$tmp_files" "$LIST_DIR"/"$PACKAGE".list
-
-# restore original dir
-cd "$PWD_SAVE"

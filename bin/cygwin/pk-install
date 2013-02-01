@@ -2,19 +2,21 @@
 
 set -e
 
-LIST_DIR="/build/list/"
+LIST_DIR="/build/list"
 INSTALL_PATH="/build/package"
 BUILD_PATH="/build/root"
 MINGW_PATH='/usr/i686-pc-mingw32/sys-root/mingw'
+MINGW_PATH2='usr/i686-pc-mingw32/sys-root/mingw'
 
 install_on_exit()
 {
   rm -rf "$tmp_unpack"
+  rm -f "$tmp_files"
+  rm -f "$tmp_clash"
+  rm -f "$tmp_choice"
 }
 
 PACKAGE=$1
-
-# [ -z "$PACKAGE" ] && PACKAGE="mingw-jpeg"
 
 [ -z "$PACKAGE" ] && {
   echo "ERROR: package not specified"
@@ -22,23 +24,19 @@ PACKAGE=$1
 }
 
 # package is system-wide
-cygcheck -dc | grep "$PACKAGE" >&/dev/null && exit 0;
+cygcheck -dc | grep "$PACKAGE" >&/dev/null && {
+  echo ""
+  exit 0;
+}
 
 trap 'install_on_exit' EXIT
 tmp_unpack=`mktemp -d`
 
+PACKAGE_NAME=`pk-find-fun "$PACKAGE" "$INSTALL_PATH" "tar.bz2"`
 
-# check if we have package
-ls "$INSTALL_PATH" | grep "^$PACKAGE" >&/dev/null || {
-  echo "ERROR: package $PACKAGE not found"
-  exit 1
-}
-
-PACKAGE_FILE=("$INSTALL_PATH/$PACKAGE"*.tar.bz2)
-DESC_FILE=("$INSTALL_PATH/$PACKAGE"*.desc)
-PACKAGE_NAME=`basename "$PACKAGE_FILE"`
-LIST_NAME=${PACKAGE_NAME%.tar.bz2}.list
-LIST_FILE="$LIST_DIR/$LIST_NAME"
+PACKAGE_FILE="$INSTALL_PATH/$PACKAGE_NAME.tar.bz2"
+LIST_FILE="$LIST_DIR/$PACKAGE_NAME.list"
+DESC_FILE=${PACKAGE_FILE/.tar.bz2/.desc}
 
 # install all deps
 deps=`grep 'requires' $DESC_FILE`
@@ -50,16 +48,35 @@ done
 
 # check if package already installed
 [ -d "$LIST_DIR" ] || mkdir -p "$LIST_DIR"
-[ -f "$LIST_FILE" ] && exit 0;
+[ -f "$LIST_FILE" ] && { echo "already installed $PACKAGE_NAME"; exit 0; };
+
+# check there would be no filenames clashes
+tmp_files=`mktemp`
+tmp_clash=`mktemp`
+tar tjf "$PACKAGE_FILE" > "$tmp_files"
+MINGW_PATH2_SED=${MINGW_PATH2//\//\\\/}
+sed -ri -e "s/$MINGW_PATH2_SED/\./" "$tmp_files"
+for file in $LIST_DIR/*
+do
+  # set intersection
+  comm -12 <(sort "$tmp_files") <(sort "$file") > "$tmp_clash"
+  [ -s "$tmp_clash" ] && {
+    file1=${file%.list}
+    file2=${file1##*/}
+    echo "ERROR: package $PACKAGE_NAME clash with $file2"
+    echo "       clashed files are:"
+    cat "$tmp_clash"
+    exit 1
+  }
+done
 
 echo "install $PACKAGE_NAME"
 
 # extract package to tmp dir
 TMP_DIR="$tmp_unpack$MINGW_PATH"
-cat $PACKAGE_FILE | bunzip2 | tar xf - -C "$tmp_unpack"
+tar xjf "$PACKAGE_FILE" -C "$tmp_unpack"
 
 # cd to tmp dir
-PWD_SAVE=`pwd`
 cd "$TMP_DIR"
 
 # create file list
@@ -67,9 +84,6 @@ find . -type f > "$LIST_FILE"
 
 # mv package to build dir
 tar c . | tar x -C "$BUILD_PATH"
-
-# restore original dir
-cd "$PWD_SAVE"
 
 shopt -s nullglob
 #fix .la and .pc files

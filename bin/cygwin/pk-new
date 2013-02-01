@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+
+BUILD_PATH="/build/root"
+LIST_DIR="/build/list/"
+
+make_on_exit()
+{
+  rm -rf "$tmp_files"
+  rm -rf "$tmp_set"
+}
+
+trap 'make_on_exit' EXIT
+tmp_files=`mktemp`
+tmp_set=`mktemp`
+
+cd "$BUILD_PATH"
+
+# find all files in root
+find . -type f > "$tmp_files"
+
+# remove files from installed packages
+cd "$LIST_DIR"
+ls | while read file
+do
+  # set complement - files int $tmp_files that are not in $file
+  comm -23 <(sort "$tmp_files") <(sort "$file") > "$tmp_set"
+  cp "$tmp_set" "$tmp_files"
+done
+
+cat "$tmp_set"

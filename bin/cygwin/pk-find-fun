@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e
+
+on_exit()
+{
+  rm -f "$tmp_choice"
+}
+
+trap on_exit EXIT
+
+name=$1
+dir=$2
+ext=$3
+
+tmp_choice=`mktemp`
+find "$dir" -name "*$name*.$ext" > "$tmp_choice"
+sed -ri -e "s/.*\///;s/.$ext$//" "$tmp_choice"
+num=`cat "$tmp_choice" | wc -l`
+[ "$num" -eq 0 ] && { echo "ERROR: package $name not found" >&2 ; exit 1; }
+[ "$num" -gt 1 ] && {
+  echo "ERROR: multiple choices for $name:" >&2
+  cat "$tmp_choice" >&2
+  exit 1
+}
+cat "$tmp_choice"
+exit 0
