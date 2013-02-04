@@ -1,0 +1,7 @@
+#!/bin/bash
+LIST_DIR="/build/list"
+INSTALL_PATH="/build/package"
+BUILD_PATH="/build/root"
+MINGW_PATH="/usr/i686-pc-mingw32/sys-root/mingw"
+MINGW_PATH2="usr/i686-pc-mingw32/sys-root/mingw"
+MINGW_BASE=~/bin/cygwin/pk-mingw-list
