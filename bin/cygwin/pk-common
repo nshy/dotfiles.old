@@ -5,3 +5,7 @@ BUILD_PATH="/build/root"
 MINGW_PATH="/usr/i686-pc-mingw32/sys-root/mingw"
 MINGW_PATH2="usr/i686-pc-mingw32/sys-root/mingw"
 MINGW_BASE=~/bin/cygwin/pk-mingw-list
+SRC_PATH="/build/src"
+BACKUP_PATH="/cygdrive/e/backup-net/"
+SETUP_PATH1="/setup/ftp%3a%2f%2fftp.cygwinports.org%2fpub%2fcygwinports/release"
+SETUP_PATH2="/setup/http%3a%2f%2flinux.rz.ruhr-uni-bochum.de%2fdownload%2fcygwin/release"

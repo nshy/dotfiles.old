@@ -2,34 +2,28 @@
 
 set -e
 
-LIST_DIR="/build/list/"
-INSTALL_PATH="/build/package"
-BUILD_PATH="/build/root"
-MINGW_PATH2='usr/i686-pc-mingw32/sys-root/mingw'
+. pk-common
 
-make_on_exit()
+on_exit()
 {
   rm -rf "$tmp_files"
 }
 
-PACKAGE=$1
-DESC=$2
-
-# [ -z "$PACKAGE" ] && PACKAGE="mingw-jbig2dec-0.11"
-# DESC=desc
+PACKAGE="$1"
+DESC="$2"
 
 [ -z "$PACKAGE" ] && { echo "ERROR: package not specified"; exit 1; }
 [ -z "$DESC" ] && { echo "ERROR: description file not specified"; exit 1; }
 [ -f "$DESC" ] || { echo "ERROR: description file not exits"; exit 1; }
 grep 'requires:' "$DESC" >&/dev/null || { echo "ERROR: no deps in description"; exit 1; }
 
-trap 'make_on_exit' EXIT
-tmp_files=`mktemp`
+trap 'on_exit' EXIT
 
 DESC_FILE=`readlink -f $DESC`
 
 cd "$BUILD_PATH"
 
+tmp_files=`mktemp`
 pk-new > "$tmp_files"
 
 [ `stat -c %s "$tmp_files"` = '0' ] && { echo "WARNING: no new files"; exit 0; }

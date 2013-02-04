@@ -2,21 +2,14 @@
 
 set -e
 
-PACKAGE=$1
+. pk-common
 
-# [ -z "$PACKAGE" ] && PACKAGE="mingw-gtk2.0"
+PACKAGE="$1"
 
-[ -z "$PACKAGE" ] && {
-  echo "ERROR: package not specified"
-  exit 1
-}
+[ -z "$PACKAGE" ] && { echo "ERROR: package not specified"; exit 1; }
 
 # package is system-wide
-cygcheck -dc | grep "$PACKAGE" >&/dev/null && exit 0;
-
-SETUP_PATH1="/setup/ftp%3a%2f%2fftp.cygwinports.org%2fpub%2fcygwinports/release"
-SETUP_PATH2="/setup/http%3a%2f%2flinux.rz.ruhr-uni-bochum.de%2fdownload%2fcygwin/release"
-INSTALL_PATH="/build/package"
+grep "$PACKAGE" "$MINGW_BASE" >&/dev/null && exit 0;
 
 SETUP_PATH=
 [ -d "$SETUP_PATH1/$PACKAGE" ] && SETUP_PATH="$SETUP_PATH1"

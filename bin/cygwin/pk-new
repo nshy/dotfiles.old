@@ -2,26 +2,25 @@
 
 set -e
 
-BUILD_PATH="/build/root"
-LIST_DIR="/build/list/"
+. pk-common
 
-make_on_exit()
+on_exit()
 {
-  rm -rf "$tmp_files"
-  rm -rf "$tmp_set"
+  rm -f "$tmp_files"
+  rm -f "$tmp_set"
 }
 
-trap 'make_on_exit' EXIT
-tmp_files=`mktemp`
-tmp_set=`mktemp`
+trap 'on_exit' EXIT
 
 cd "$BUILD_PATH"
 
 # find all files in root
+tmp_files=`mktemp`
 find . -type f > "$tmp_files"
 
 # remove files from installed packages
 cd "$LIST_DIR"
+tmp_set=`mktemp`
 ls | while read file
 do
   # set complement - files int $tmp_files that are not in $file

@@ -2,25 +2,17 @@
 
 set -e
 
-LIST_DIR="/build/list/"
-INSTALL_PATH="/build/package"
-BUILD_PATH="/build/root"
-MINGW_PATH='/usr/i686-pc-mingw32/sys-root/mingw'
+. pk-common
 
-PACKAGE=$1
+PACKAGE="$1"
 
-[ -z "$PACKAGE" ] && {
-  echo "ERROR: package not specified"
-  exit 1
-}
+[ -z "$PACKAGE" ] && { echo "ERROR: package not specified"; exit 1; }
 
 PACKAGE_NAME=`pk-find-fun "$PACKAGE" "$LIST_DIR" "list"`
 
-LIST_FILE="$LIST_DIR/$PACKAGE_NAME.list"
-
 echo "remove $PACKAGE_NAME"
 
+LIST_FILE="$LIST_DIR/$PACKAGE_NAME.list"
 cd "$BUILD_PATH"
 rm `cat "$LIST_FILE"`
-
 rm "$LIST_FILE"

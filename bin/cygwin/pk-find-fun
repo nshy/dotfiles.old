@@ -9,9 +9,9 @@ on_exit()
 
 trap on_exit EXIT
 
-name=$1
-dir=$2
-ext=$3
+name="$1"
+dir="$2"
+ext="$3"
 
 tmp_choice=`mktemp`
 find "$dir" -name "*$name*.$ext" > "$tmp_choice"

@@ -2,9 +2,7 @@
 
 set -e
 
-INSTALL_PATH="/build/package"
-SRC_PATH="/build/src"
-BACKUP_PATH="/cygdrive/e/backup-net/"
+. pk-common
 
 rsync_options='-av'
 rsync "$rsync_options" "$INSTALL_PATH" "$BACKUP_PATH"
