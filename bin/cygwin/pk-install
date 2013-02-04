@@ -11,13 +11,15 @@ on_exit()
 trap 'on_exit' EXIT
 
 PACKAGE="$1"
+DIR="$2"
 
 [ -z "$PACKAGE" ] && { echo "ERROR: package not specified"; exit 1; }
+pk_set_dir "$DIR"
 
 PACKAGE_NAME=`pk-find-fun "$PACKAGE" "$INSTALL_PATH" "tar.bz2"`
 
 # check if package already installed
-[ -f "$LIST_DIR/$PACKAGE_NAME.list" ] && { echo "$PACKAGE_NAME is already installed"; exit 0; };
+[ -f "$LIST_DIR_LOCAL/$PACKAGE_NAME.list" ] && { echo "$PACKAGE_NAME is already installed"; exit 0; };
 
 # make dep list
 cd "$INSTALL_PATH"
@@ -35,7 +37,7 @@ add_deps()
     add_deps `pk-find-fun "$pack" "$INSTALL_PATH" "desc"`
   done
 
-  [ -f "$LIST_DIR/$1.list" ] && continue
+  [ -f "$LIST_DIR_LOCAL/$1.list" ] && return
   echo "$1" >> "$tmp_deps"
 }
 add_deps "$PACKAGE_NAME"
@@ -43,5 +45,5 @@ add_deps "$PACKAGE_NAME"
 # find uniq lines without messing with sort
 awk '!seen[$0]++' "$tmp_deps" | while read name
 do
-  pk-install-job "$name"
+  pk-install-job "$name" "$DIR_EXPAND"
 done

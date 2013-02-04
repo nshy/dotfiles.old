@@ -9,3 +9,19 @@ SRC_PATH="/build/src"
 BACKUP_PATH="/cygdrive/e/backup-net/"
 SETUP_PATH1="/setup/ftp%3a%2f%2fftp.cygwinports.org%2fpub%2fcygwinports/release"
 SETUP_PATH2="/setup/http%3a%2f%2flinux.rz.ruhr-uni-bochum.de%2fdownload%2fcygwin/release"
+
+pk_set_dir()
+{
+  if [ -n "$1" ]
+  then
+    LIST_DIR_LOCAL=`readlink -f "$1/list"`;
+    BUILD_PATH_LOCAL=`readlink -f "$1/libs"`;
+    DIR_EXPAND=`readlink -f "$1"`
+    [ -d "$LIST_DIR_LOCAL" ] || mkdir -p "$LIST_DIR_LOCAL";
+    [ -d "$BUILD_PATH_LOCAL" ] || mkdir -p "$BUILD_PATH_LOCAL";
+  else
+    LIST_DIR_LOCAL="$LIST_DIR";
+    BUILD_PATH_LOCAL="$BUILD_PATH";
+    DIR_EXPAND=
+  fi
+}

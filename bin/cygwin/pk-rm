@@ -5,14 +5,16 @@ set -e
 . pk-common
 
 PACKAGE="$1"
+DIR="$2"
 
 [ -z "$PACKAGE" ] && { echo "ERROR: package not specified"; exit 1; }
+pk_set_dir "$DIR"
 
-PACKAGE_NAME=`pk-find-fun "$PACKAGE" "$LIST_DIR" "list"`
+PACKAGE_NAME=`pk-find-fun "$PACKAGE" "$LIST_DIR_LOCAL" "list"`
 
 echo "remove $PACKAGE_NAME"
 
-LIST_FILE="$LIST_DIR/$PACKAGE_NAME.list"
-cd "$BUILD_PATH"
+LIST_FILE="$LIST_DIR_LOCAL/$PACKAGE_NAME.list"
+cd "$BUILD_PATH_LOCAL"
 rm `cat "$LIST_FILE"`
 rm "$LIST_FILE"
