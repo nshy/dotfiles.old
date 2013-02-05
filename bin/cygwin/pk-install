@@ -13,6 +13,8 @@ trap 'on_exit' EXIT
 package="$1"
 dir=`pk-build-dir "$2"`
 
+echo "Target dir is $dir"
+
 [ $dir" != /build" ] && pk-create-local-dirs "$dir"
 
 [ -z "$package" ] && { echo "ERROR: package not specified"; exit 1; }

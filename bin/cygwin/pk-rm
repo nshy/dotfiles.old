@@ -7,6 +7,8 @@ set -e
 package="$1"
 dir=`pk-build-dir "$2"`
 
+echo "Target dir is $dir"
+
 build_dir="$dir/"`pk-root-dir "$dir"`
 
 [ -z "$package" ] && { echo "ERROR: package not specified"; exit 1; }
