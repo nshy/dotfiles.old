@@ -9,17 +9,17 @@ on_exit()
   rm -rf "$tmp_files"
 }
 
-PACKAGE="$1"
-DESC="$2"
+name="$1"
+desc="$2"
 
-[ -z "$PACKAGE" ] && { echo "ERROR: package not specified"; exit 1; }
-[ -z "$DESC" ] && { echo "ERROR: description file not specified"; exit 1; }
-[ -f "$DESC" ] || { echo "ERROR: description file not exits"; exit 1; }
-grep 'requires:' "$DESC" >&/dev/null || { echo "ERROR: no deps in description"; exit 1; }
+[ -z "$name" ] && { echo "ERROR: package not specified"; exit 1; }
+[ -z "$desc" ] && { echo "ERROR: description file not specified"; exit 1; }
+[ -f "$desc" ] || { echo "ERROR: description file not exits"; exit 1; }
+grep 'requires:' "$desc" >&/dev/null || { echo "ERROR: no deps in description"; exit 1; }
 
 trap 'on_exit' EXIT
 
-DESC_FILE=`readlink -f $DESC`
+desc_file=`readlink -f $desc`
 
 cd "$BUILD_PATH"
 
@@ -28,10 +28,10 @@ pk-new > "$tmp_files"
 
 [ `stat -c %s "$tmp_files"` = '0' ] && { echo "WARNING: no new files"; exit 0; }
 
-echo "Make package $PACKAGE"
+echo "Make package $name"
 
 cd "$BUILD_PATH"
-tar -cjf "$INSTALL_PATH"/"$PACKAGE".tar.bz2 -T "$tmp_files" \
+tar -cjf "$INSTALL_PATH"/"$name".tar.bz2 -T "$tmp_files" \
   --transform="s,^.,$MINGW_PATH2,"
-cp "$DESC_FILE" "$INSTALL_PATH"/"$PACKAGE".desc
-cp "$tmp_files" "$LIST_DIR"/"$PACKAGE".list
+cp "$desc_file" "$INSTALL_PATH"/"$name".desc
+cp "$tmp_files" "$LIST_DIR"/"$name".list
