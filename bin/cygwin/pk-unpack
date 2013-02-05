@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+. pk-common
+
+[ -d "$1" ] || { echo "$1 doesn't exist"; exit 1; }
+dir=`readlink -f "$1"`
+
+[ -d "$dir/packages" ] || { "ERROR: $dir doesn't contain packages"; exit 1; }
+
+pk-create-local-dirs "$dir"
+
+ls -1 "$dir/packages" | while read file
+do
+  name=${file/.tar.bz2/}
+  pk-extract "$name" "$dir"
+  echo "$name unpacked"
+done
