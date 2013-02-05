@@ -29,4 +29,3 @@ do
   pk-extract "$name" "$dir"
   [ "$dir" != "/build" ] && cp "$INSTALL_PATH/$name.tar.bz2" "$dir/packages"
 done
-

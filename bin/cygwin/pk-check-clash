@@ -9,11 +9,10 @@ dir="$2"
 
 build_dir="$dir/"`pk-root-dir "$dir"`
 
-on_exit() { rm -f "$tmp_files" "$tmp_clash" "$tmp_clash2"; }
+on_exit() { rm -f "$tmp_files" "$tmp_clash"; }
 trap 'on_exit' EXIT
 tmp_files=`mktemp`
 tmp_clash=`mktemp`
-tmp_clash2=`mktemp`
 
 from=${MINGW_PATH2//\//\\\/}
 tar tj --transform="s/$from/./" --show-transformed-names \
@@ -22,10 +21,7 @@ tar tj --transform="s/$from/./" --show-transformed-names \
 for file in $dir/list/*
 do
   # set intersection
-  comm -12 <(sort "$tmp_files") <(sort "$file") > "$tmp_clash2"
-  # minus directories
-  cd "$build_dir"
-  comm -23 <(sort "$tmp_clash2") <(find . -type d | sort) > "$tmp_clash"
+  comm -12 <(sort "$tmp_files") <(sort "$file") > "$tmp_clash"
   [ -s "$tmp_clash" ] && {
     file1=${file%.list}
     file2=${file1##*/}
