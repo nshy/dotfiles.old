@@ -1,6 +1,6 @@
 #!/bin/bash
 LIST_DIR="/build/list"
-INSTALL_PATH="/build/package"
+INSTALL_PATH="/build/packages"
 BUILD_PATH="/build/root"
 MINGW_PATH="/usr/i686-pc-mingw32/sys-root/mingw"
 MINGW_PATH2="usr/i686-pc-mingw32/sys-root/mingw"
@@ -9,19 +9,70 @@ SRC_PATH="/build/src"
 BACKUP_PATH="/cygdrive/e/backup-net/"
 SETUP_PATH1="/setup/ftp%3a%2f%2fftp.cygwinports.org%2fpub%2fcygwinports/release"
 SETUP_PATH2="/setup/http%3a%2f%2flinux.rz.ruhr-uni-bochum.de%2fdownload%2fcygwin/release"
+shopt -s nullglob
 
-pk_set_dir()
+pk-create-local-dirs()
 {
-  if [ -n "$1" ]
+    declare list="$1/list"
+    declare libs="$1/libs"
+    declare packs="$1/packages"
+    [ -d "$list" ] || mkdir -p "$list"
+    [ -d "$libs" ] || mkdir -p "$libs"
+    [ -d "$packs" ] || mkdir -p "$packs"
+}
+
+pk-build-dir()
+{
+  if [ -z "$1" ]
   then
-    LIST_DIR_LOCAL=`readlink -f "$1/list"`;
-    BUILD_PATH_LOCAL=`readlink -f "$1/libs"`;
-    DIR_EXPAND=`readlink -f "$1"`
-    [ -d "$LIST_DIR_LOCAL" ] || mkdir -p "$LIST_DIR_LOCAL";
-    [ -d "$BUILD_PATH_LOCAL" ] || mkdir -p "$BUILD_PATH_LOCAL";
+    echo "/build"
   else
-    LIST_DIR_LOCAL="$LIST_DIR";
-    BUILD_PATH_LOCAL="$BUILD_PATH";
-    DIR_EXPAND=
+    [ -d "$1" ] || { echo "Build dir doesn't exist" >&2; exit 1; }
+    readlink -f "$1"
   fi
+}
+
+pk-check-installed()
+{
+  declare name="$1"
+  declare dir="$2"
+  [ -f "$dir/list/$name.list" ] && {
+    echo "$name is already installed"
+    exit 0
+  }
+  return 0
+}
+
+pk-root-dir()
+{
+  if [ "$1" = "/build" ]
+  then
+    echo "root"
+  else
+    echo "libs"
+  fi
+}
+
+pk-extract()
+{
+  declare name="$1"
+  declare dir="$2"
+
+  declare list="$dir/list/$name.list"
+  declare build_dir="$dir/"`pk-root-dir "$dir"`
+
+  declare from2=${MINGW_PATH2//\//\\\/}
+  declare from=${MINGW_PATH//\//\\\/}
+  declare to=${build_dir//\//\\\/}
+
+  # extract package removing mingw prefix of filenames
+  touch "$list"
+  tar vxj --transform="s/$from2/./" --show-transformed-names -f "$INSTALL_PATH/$name.tar.bz2" \
+    -C "$build_dir" --wildcards "$MINGW_PATH2/*" > `readlink -f $list`
+
+  #fix .la and .pc files
+  grep -l "$MINGW_PATH" "$build_dir"/lib/pkgconfig/*.pc "$build_dir"/lib/*.la | while read file
+  do
+    sed -i -re "s/$from/$to/g" $file
+  done
 }

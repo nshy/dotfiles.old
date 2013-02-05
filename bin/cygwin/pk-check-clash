@@ -1,0 +1,38 @@
+#!/bin/bash
+
+set -e
+
+. pk-common
+
+name="$1"
+dir="$2"
+
+build_dir="$dir/"`pk-root-dir "$dir"`
+
+on_exit() { rm -f "$tmp_files" "$tmp_clash" "$tmp_clash2"; }
+trap 'on_exit' EXIT
+tmp_files=`mktemp`
+tmp_clash=`mktemp`
+tmp_clash2=`mktemp`
+
+from=${MINGW_PATH2//\//\\\/}
+tar tj --transform="s/$from/./" --show-transformed-names \
+  -f "$INSTALL_PATH/$name.tar.bz2" > "$tmp_files"
+# cat "$tmp_files"
+for file in $dir/list/*
+do
+  # set intersection
+  comm -12 <(sort "$tmp_files") <(sort "$file") > "$tmp_clash2"
+  # minus directories
+  cd "$build_dir"
+  comm -23 <(sort "$tmp_clash2") <(find . -type d | sort) > "$tmp_clash"
+  [ -s "$tmp_clash" ] && {
+    file1=${file%.list}
+    file2=${file1##*/}
+    echo "ERROR: package $name clash with $file2"
+    echo "       clashed files are:"
+    cat "$tmp_clash"
+    exit 1
+  }
+done
+exit 0

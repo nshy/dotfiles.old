@@ -4,17 +4,22 @@ set -e
 
 . pk-common
 
-PACKAGE="$1"
-DIR="$2"
+package="$1"
+dir=`pk-build-dir "$2"`
 
-[ -z "$PACKAGE" ] && { echo "ERROR: package not specified"; exit 1; }
-pk_set_dir "$DIR"
+build_dir="$dir/"`pk-root-dir "$dir"`
 
-PACKAGE_NAME=`pk-find-fun "$PACKAGE" "$LIST_DIR_LOCAL" "list"`
+[ -z "$package" ] && { echo "ERROR: package not specified"; exit 1; }
 
-echo "remove $PACKAGE_NAME"
+name=`pk-find-fun "$package" "$dir/list" "list"`
 
-LIST_FILE="$LIST_DIR_LOCAL/$PACKAGE_NAME.list"
-cd "$BUILD_PATH_LOCAL"
-rm `cat "$LIST_FILE"`
-rm "$LIST_FILE"
+echo "remove $name"
+
+list_file="$dir/list/$name.list"
+
+cd "$build_dir"
+rm `cat "$list_file"`
+rm "$list_file"
+
+# rm package from local dir if needed
+[ "$dir" != "/build" ] && rm "$dir/packages/$name.tar.bz2"
