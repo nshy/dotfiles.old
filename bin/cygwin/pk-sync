@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+. pk-common
+
+apt-cyg -m "$MIRROR_PORTS" update
+apt-cyg -m "$MIRROR_MAIN" update

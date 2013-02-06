@@ -9,7 +9,15 @@ SRC_PATH="/build/src"
 BACKUP_PATH="/cygdrive/e/backup-net/"
 SETUP_PATH1="/setup/ftp%3a%2f%2fftp.cygwinports.org%2fpub%2fcygwinports/release"
 SETUP_PATH2="/setup/http%3a%2f%2flinux.rz.ruhr-uni-bochum.de%2fdownload%2fcygwin/release"
+
+MIRROR_PORTS="ftp://ftp.cygwinports.org/pub/cygwinports"
+MIRROR_MAIN="http://linux.rz.ruhr-uni-bochum.de/download/cygwin"
 shopt -s nullglob
+
+pk-mirror-dir()
+{
+  echo "$1" | sed -e "s/:/%3a/g" -e "s:/:%2f:g"
+}
 
 pk-create-local-dirs()
 {
