@@ -1,0 +1,84 @@
+#!/bin/bash
+
+set -e
+
+. pk-common
+
+on_exit()
+{
+  rm -f "$tmp_desc"
+}
+trap 'on_exit' EXIT
+
+tmp_desc=`mktemp`
+
+cd "$INSTALL_PATH"
+
+echo "Downgrade libpng"
+rm mingw-libpng*
+cp ../packages2/mingw-libpng* .
+
+declare -a versions
+
+# Update packages
+for file in mingw-*.tar.bz2
+do
+
+  desc=${file/.tar.bz2/.desc}
+  ver=`awk '/^version: / { print $2; exit }' "$desc"`
+  name=${file%.tar.bz2}
+  pkg=${name%-$ver}
+
+  # find package description
+  for mirror in "$MIRROR_MAIN" "$MIRROR_PORTS"
+  do
+    dir="/setup/`pk-mirror-dir "$mirror"`"
+    awk -v package="$pkg" -f <(cat - <<'CODE'
+      BEGIN {
+        RS = "\n\n@ "
+        FS = "\n"
+      }
+      {
+        if ($1 == package) {
+          desc = $0
+          px++
+        }
+      }
+      END {
+        if (px == 1 && desc != "")
+          print desc
+      }
+CODE
+) "$dir/setup.ini" > "$tmp_desc"
+    [ -s "$tmp_desc" ] && break
+  done
+
+  [ -s "$tmp_desc" ] || { echo "ERROR: $pkg not found in mirrors"; exit; }
+
+  # check package version
+  ver2=`awk '/^version: / { print $2; exit }' "$tmp_desc"`
+  file2="$pkg-$ver2.tar.bz2"
+  desc2="$pkg-$ver2.desc"
+  path2=`awk '/^install: / { print $2; exit }' "$tmp_desc"`
+  [ "$ver2" == "$ver" ] && continue
+
+  # download new version
+  cp "../mirror/$file2" .
+  # wget -nc "$mirror/$path2"
+  cp "$tmp_desc" "$desc2"
+  rm "$file" "$desc"
+
+  # check the md5
+  dig1=`cat "$desc2" | awk '/^install: / { print $4; exit }'`
+  dig2=`md5sum $file2 | awk '{print $1}'`
+  [ "$dig1" != "$dig2" ] && { echo "ERROR: md5 sum did not match"; exit 1; }
+
+  echo "$pkg updated"
+
+done
+
+# Update versions
+# for pkg in mingw-*
+# do
+#   echo "$pkg"
+# done

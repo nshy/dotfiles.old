@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+. pk-common
+
+pkg=$1
+
+for mirror in "$MIRROR_MAIN" "$MIRROR_PORTS"
+do
+      dir="/setup/`pk-mirror-dir "$mirror"`"
+      awk -v query="mingw-.*$pkg" -f <(cat -<<'CODE'
+        BEGIN {
+          RS = "\n\n@ "
+          FS = "\n"
+        }
+        {
+          if ($1 ~ query)
+            print $1
+        }
+CODE
+) "$dir/setup.ini"
+done
