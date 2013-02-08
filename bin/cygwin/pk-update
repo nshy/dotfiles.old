@@ -1,16 +1,6 @@
 #!/bin/bash
 
-set -e
-
 . pk-common
-
-on_exit()
-{
-  rm -f "$tmp_desc"
-}
-trap 'on_exit' EXIT
-
-tmp_desc=`mktemp`
 
 cd "$INSTALL_PATH"
 

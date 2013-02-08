@@ -4,9 +4,6 @@ set -e
 
 . pk-common
 
-on_exit() { rm -f "$tmp_list"; }
-trap 'on_exit' EXIT
-
 declare name="$1"
 declare dir="$2"
 
@@ -19,7 +16,7 @@ declare to=${build_dir//\//\\\/}
 
 
 # extract package removing mingw prefix of filenames
-tmp_list=`mktemp`
+tmp_list=`pk-make-tmp`
 tar vxj --transform="s/$from2/./" --show-transformed-names -f "$INSTALL_PATH/$name.tar.bz2" \
   -C "$build_dir" --wildcards "$MINGW_PATH2/*" > "$tmp_list"
 

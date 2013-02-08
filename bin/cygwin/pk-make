@@ -4,11 +4,6 @@ set -e
 
 . pk-common
 
-on_exit()
-{
-  rm -rf "$tmp_files"
-}
-
 name="$1"
 desc="$2"
 
@@ -17,13 +12,11 @@ desc="$2"
 [ -f "$desc" ] || { echo "ERROR: description file not exits"; exit 1; }
 grep 'requires:' "$desc" >&/dev/null || { echo "ERROR: no deps in description"; exit 1; }
 
-trap 'on_exit' EXIT
-
 desc_file=`readlink -f $desc`
 
 cd "$BUILD_PATH"
 
-tmp_files=`mktemp`
+tmp_files=`pk-make-tmp`
 pk-new > "$tmp_files"
 
 [ `stat -c %s "$tmp_files"` = '0' ] && { echo "WARNING: no new files"; exit 0; }

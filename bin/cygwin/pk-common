@@ -12,7 +12,24 @@ SETUP_PATH2="/setup/http%3a%2f%2flinux.rz.ruhr-uni-bochum.de%2fdownload%2fcygwin
 
 MIRROR_PORTS="ftp://ftp.cygwinports.org/pub/cygwinports"
 MIRROR_MAIN="http://linux.rz.ruhr-uni-bochum.de/download/cygwin"
+PK_TMP_FILES=`mktemp`
+
 shopt -s nullglob
+trap pk-on-exit EXIT
+set -e
+
+pk-make-tmp()
+{
+  declare f=`mktemp`
+  echo "$f" >> "$PK_TMP_FILES"
+  echo "$f"
+}
+
+pk-on-exit()
+{
+  rm -f `cat "$PK_TMP_FILES"`
+  rm "$PK_TMP_FILES"
+}
 
 pk-mirror-dir()
 {

@@ -2,18 +2,13 @@
 
 set -e
 
-on_exit()
-{
-  rm -f "$tmp_choice"
-}
-
-trap on_exit EXIT
+. pk-common
 
 name="$1"
 dir="$2"
 ext="$3"
 
-tmp_choice=`mktemp`
+tmp_choice=`pk-make-tmp`
 find "$dir" -name "*$name*.$ext" > "$tmp_choice"
 sed -ri -e "s/.*\///;s/.$ext$//" "$tmp_choice"
 num=`cat "$tmp_choice" | wc -l`

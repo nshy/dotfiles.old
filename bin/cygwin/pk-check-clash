@@ -9,10 +9,8 @@ dir="$2"
 
 build_dir="$dir/"`pk-root-dir "$dir"`
 
-on_exit() { rm -f "$tmp_files" "$tmp_clash"; }
-trap 'on_exit' EXIT
-tmp_files=`mktemp`
-tmp_clash=`mktemp`
+tmp_files=`pk-make-tmp`
+tmp_clash=`pk-make-tmp`
 
 from=${MINGW_PATH2//\//\\\/}
 tar tj --transform="s/$from/./" --show-transformed-names \
