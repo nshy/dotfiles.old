@@ -28,5 +28,4 @@ echo "Make package $name"
 cd libs
 tar -cjf "$INSTALL_PATH/$name/$file" -T "$tmp_files" --transform="s,^.,$MINGW_PATH2,"
 cp "$desc_file" "$INSTALL_PATH/$name/desc"
-cp "$tmp_files" "$name.list"
 pk-create-vers "$name" > "$INSTALL_PATH/$name/vers"

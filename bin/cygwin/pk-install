@@ -9,14 +9,14 @@ pk-create-local-dirs
 [ -z "$name" ] && { echo "ERROR: package not specified"; exit 1; }
 
 dir=`readlink -f .`
-pk_list_dir="$dir/list"
+pk_install_dir="$dir"
 tmp_deps=`pk-make-tmp`
 pk-make-dep-list2 "$name" pk-local-desc pk-install-status > "$tmp_deps"
 
+# set -x
 cat "$tmp_deps" | while read name
 do
-  file=`pk-local-tar "$name"`
-  pk-check-clash2 "$name" "$dir"
+  pk-check-clash2 "$name" "$dir" "$dir/packages"
 
   echo "install $name"
 

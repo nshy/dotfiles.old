@@ -3,21 +3,24 @@
 . pk-common
 
 pk-create-local-dirs
+dir=`readlink -f .`
 
-pushd libs >/dev/null
+cd libs
+
+tmp_files=`pk-make-tmp`
+tmp_files2=`pk-make-tmp`
 
 # find all files in root
-tmp_files=`pk-make-tmp`
 find . -type f > "$tmp_files"
 
 # remove files from installed packages
-popd >/dev/null
-cd list
+cd ../packages
 tmp_set=`pk-make-tmp`
-ls | while read file
+for name in *
 do
   # set complement - files int $tmp_files that are not in $file
-  comm -23 <(sort "$tmp_files") <(sort "$file") > "$tmp_set"
+  pk-print-tar-files "$name" "$dir/packages" > "$tmp_files2"
+  comm -23 <(sort "$tmp_files") <(sort "$tmp_files2") > "$tmp_set"
   cp "$tmp_set" "$tmp_files"
 done
 

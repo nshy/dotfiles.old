@@ -5,15 +5,16 @@
 name="$1"
 
 pk-create-local-dirs
+dir=`readlink -f .`
 
 [ -z "$name" ] && { echo "ERROR: package not specified"; exit 1; }
 
 echo "remove $name"
 
-list_file=`readlink -f "list/$name.list"`
+tmp_list=`pk-make-tmp`
+pk-print-tar-files "$name" "$dir/packages" > "$tmp_list"
 
 cd libs
-rm `cat "$list_file"`
+rm `cat "$tmp_list"`
 cd ..
-rm "$list_file"
 rm -r "packages/$name"

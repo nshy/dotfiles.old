@@ -1,4 +1,4 @@
-#!/bin/bash
+
 
 INSTALL_PATH="/packages"
 MINGW_PATH="/usr/i686-pc-mingw32/sys-root/mingw"
@@ -33,7 +33,6 @@ pk-mirror-dir()
 
 pk-create-local-dirs()
 {
-    [ -d list ] || mkdir list
     [ -d libs ] || mkdir libs
     [ -d packages ] || mkdir packages
 }
@@ -80,12 +79,12 @@ CODE
 
 pk-setup-status()
 {
-  [ -d "$INSTALL_PATH/"$1 ]
+  [ -d "$INSTALL_PATH/$1" ]
 }
 
 pk-install-status()
 {
-  [ -f "$pk_list_dir/$1.list" ]
+  [ -d "$pk_install_dir/packages/$1" ]
 }
 
 pk-setup-package()
@@ -201,38 +200,48 @@ pk-pkg-to-tar()
   echo "$1-$ver.tar.bz2"
 }
 
-pk-local-tar()
+pk-print-tar-files()
 {
-  declare ver=`pk-local-desc "$name" | pk-print-ver`
-  echo "$1/$1-$ver.tar.bz2"
+  declare name="$1"
+  declare pack_dir="$2"
+
+  declare file=`pk-tar-file "$name" "$pack_dir"`
+
+  set +e
+  tar tvj --transform="s,$MINGW_PATH2,.," --show-transformed-names -f "$file" \
+    --wildcards "$MINGW_PATH2/*" 2>/dev/null | grep -v '^d' | awk '{ print $6 }'
+  set -e
 }
 
 pk-check-clash2()
 {
   declare name="$1"
   declare dir="$2"
-
-  declare build_dir="$dir/libs"
-  declare file=`pk-local-tar "$name"`
+  declare pack_dir="$3"
 
   declare tmp_clash=`pk-make-tmp`
   declare tmp_files=`pk-make-tmp`
+  declare tmp_files2=`pk-make-tmp`
+  declare res=0
 
-  tar tj --transform="s,$MINGW_PATH2,.," --show-transformed-names \
-    -f "$INSTALL_PATH/$file" > "$tmp_files"
+  pk-print-tar-files "$name" "$INSTALL_PATH" > "$tmp_files"
 
-  for name2 in $dir/list/*
+  pushd "$dir/packages" >/dev/null
+  for name2 in *
   do
+    pk-print-tar-files "$name2" "$pack_dir" > "$tmp_files2"
     # set intersection
-    comm -12 <(sort "$tmp_files") <(sort "$name2") > "$tmp_clash"
+    comm -12 <(sort "$tmp_files") <(sort "$tmp_files2") > "$tmp_clash"
     [ -s "$tmp_clash" ] && {
       echo "ERROR: package $name clash with $name2"
       echo "       clashed files are:"
       cat "$tmp_clash"
-      exit 1
+      res=1
+      break
     }
   done
-  return 0
+  popd >/dev/null
+  return $res
 }
 
 pk-tar-file()
@@ -249,19 +258,14 @@ pk-extract2()
   declare dir="$2"
   declare pack_dir="$3"
 
-  declare list="$dir/list/$name.list"
   declare file=`pk-tar-file "$name" "$pack_dir"`
   declare build_dir="$dir/libs"
 
   pushd "$build_dir" >/dev/null
 
   # extract package removing mingw prefix of filenames
-  declare tmp_list=`pk-make-tmp`
-  tar vxj --transform="s,$MINGW_PATH2,.," --show-transformed-names -f "$file" \
-    --wildcards "$MINGW_PATH2/*" > "$tmp_list" 2>/dev/null || echo >/dev/null # nop
-
-  # rm pure directory entries
-  comm -23 <(sort "$tmp_list") <(find . -type d | sort) > "$list"
+  tar xj --transform="s,$MINGW_PATH2,.," --show-transformed-names -f "$file" \
+    --wildcards "$MINGW_PATH2/*" 2>/dev/null || echo >/dev/null # nop
 
   #fix .la and .pc files
   declare file
