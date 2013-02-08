@@ -20,7 +20,7 @@ do
 
   echo "install $name"
 
-  pk-extract2 "$name" "$dir"
+  pk-extract2 "$name" "$dir" "$INSTALL_PATH"
   mkdir "$dir/packages/$name"
   cp -r "$INSTALL_PATH/$name"/{desc,*.tar.bz2} "$dir/packages/$name"
 done

@@ -235,20 +235,29 @@ pk-check-clash2()
   return 0
 }
 
+pk-tar-file()
+{
+  declare name="$1"
+  declare dir="$2"
+  declare ver=`cat "$dir/$name/desc" | pk-print-ver`
+  echo "$dir/$name/$name-$ver.tar.bz2"
+}
+
 pk-extract2()
 {
   declare name="$1"
   declare dir="$2"
+  declare pack_dir="$3"
 
   declare list="$dir/list/$name.list"
-  declare file=`pk-local-tar "$name"`
+  declare file=`pk-tar-file "$name" "$pack_dir"`
   declare build_dir="$dir/libs"
 
   pushd "$build_dir" >/dev/null
 
   # extract package removing mingw prefix of filenames
   declare tmp_list=`pk-make-tmp`
-  tar vxj --transform="s,$MINGW_PATH2,.," --show-transformed-names -f "$INSTALL_PATH/$file" \
+  tar vxj --transform="s,$MINGW_PATH2,.," --show-transformed-names -f "$file" \
     --wildcards "$MINGW_PATH2/*" > "$tmp_list" 2>/dev/null || echo >/dev/null # nop
 
   # rm pure directory entries

@@ -2,16 +2,15 @@
 
 . pk-common
 
-[ -d "$1" ] || { echo "$1 doesn't exist"; exit 1; }
-dir=`readlink -f "$1"`
+pk-create-local-dirs
 
-[ -d "$dir/packages" ] || { "ERROR: $dir doesn't contain packages"; exit 1; }
+dir=`readlink -f .`
 
-pk-create-local-dirs "$dir"
+[ -d "packages" ] || { "ERROR: `pwd` doesn't contain packages"; exit 1; }
 
-ls -1 "$dir/packages" | while read file
+cd packages
+for name in *
 do
-  name=${file/.tar.bz2/}
-  pk-extract "$name" "$dir"
+  pk-extract2 "$name" "$dir" "$dir/packages"
   echo "$name unpacked"
 done
