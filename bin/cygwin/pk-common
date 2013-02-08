@@ -166,17 +166,6 @@ pk-setup-package()
     exit 1
   }
 
-  # create version file
-  # declare ver_file="$pkg-$ver2.vers"
-  # rm -f "$ver_file"
-  # declare dep
-  # for dep in `pk-print-deps "$tmp_desc"`
-  # do
-  # TODO fix
-  #   declare verd=`pk-print-ver <(pk-find-desc "$dep")`
-  #   echo "$dep" "$verd" >> "$ver_file"
-  # done
-
   return 0
 }
 
@@ -322,4 +311,16 @@ pk-extract2()
   done
 
   popd >/dev/null
+}
+
+pk-create-vers()
+{
+  declare name="$1"
+
+  declare dep
+  for dep in `cat "$INSTALL_PATH/$1/desc" | pk-print-deps`
+  do
+    declare v=`cat "$INSTALL_PATH/$dep/desc" | pk-print-ver`
+    echo "$dep" "$v"
+  done
 }
