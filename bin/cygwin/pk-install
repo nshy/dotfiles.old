@@ -1,31 +1,28 @@
 #!/bin/bash
 
-set -e
-
 . pk-common
 
 name="$1"
-dir=`pk-build-dir "$2"`
 
-[ "$dir" != "/build" ] && pk-create-local-dirs "$dir"
-echo "Target dir is $dir"
+pk-create-local-dirs
 
 [ -z "$name" ] && { echo "ERROR: package not specified"; exit 1; }
 
+dir=`readlink -f .`
 pk_list_dir="$dir/list"
 tmp_deps=`pk-make-tmp`
 pk-make-dep-list2 "$name" pk-local-desc pk-install-status > "$tmp_deps"
 
 cat "$tmp_deps" | while read name
 do
-  pk-check-clash2 "$name" "$dir"
-  echo "install $name"
-  pk-extract2 "$name" "$dir"
   file=`pk-local-tar "$name"`
-  [ "$dir" != "/build" ] &&  {
-    mkdir "$dir/packages/$name"
-    cp -r "$INSTALL_PATH/$name"/{desc,*.tar.bz2} "$dir/packages/$name"
-  }
+  pk-check-clash2 "$name" "$dir"
+
+  echo "install $name"
+
+  pk-extract2 "$name" "$dir"
+  mkdir "$dir/packages/$name"
+  cp -r "$INSTALL_PATH/$name"/{desc,*.tar.bz2} "$dir/packages/$name"
 done
 
 [ -s "$tmp_deps" ] || echo "Everything is installed"

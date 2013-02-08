@@ -1,26 +1,19 @@
 #!/bin/bash
 
-set -e
-
 . pk-common
 
 name="$1"
-dir=`pk-build-dir "$2"`
 
-echo "Target dir is $dir"
-
-build_dir="$dir/"`pk-root-dir "$dir"`
+pk-create-local-dirs
 
 [ -z "$name" ] && { echo "ERROR: package not specified"; exit 1; }
 
 echo "remove $name"
 
-list_file="$dir/list/$name.list"
+list_file=`readlink -f "list/$name.list"`
 
-cd "$build_dir"
+cd libs
 rm `cat "$list_file"`
+cd ..
 rm "$list_file"
-
-# rm package from local dir if needed
-file=`pk-pkg-to-tar "$name"`
-[ "$dir" != "/build" ] && rm "$dir/packages/$file"
+rm -r "packages/$name"

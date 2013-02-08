@@ -1,14 +1,9 @@
 #!/bin/bash
-LIST_DIR="/build/list"
-INSTALL_PATH="/build/packages"
-BUILD_PATH="/build/root"
+
+INSTALL_PATH="/packages"
 MINGW_PATH="/usr/i686-pc-mingw32/sys-root/mingw"
 MINGW_PATH2="usr/i686-pc-mingw32/sys-root/mingw"
 MINGW_BASE=~/bin/cygwin/pk-mingw-list
-SRC_PATH="/build/src"
-BACKUP_PATH="/cygdrive/e/backup-net/"
-SETUP_PATH1="/setup/ftp%3a%2f%2fftp.cygwinports.org%2fpub%2fcygwinports/release"
-SETUP_PATH2="/setup/http%3a%2f%2flinux.rz.ruhr-uni-bochum.de%2fdownload%2fcygwin/release"
 
 MIRROR_PORTS="ftp://ftp.cygwinports.org/pub/cygwinports"
 MIRROR_MAIN="http://linux.rz.ruhr-uni-bochum.de/download/cygwin"
@@ -38,53 +33,9 @@ pk-mirror-dir()
 
 pk-create-local-dirs()
 {
-    declare list="$1/list"
-    declare libs="$1/libs"
-    declare packs="$1/packages"
-    [ -d "$list" ] || mkdir -p "$list"
-    [ -d "$libs" ] || mkdir -p "$libs"
-    [ -d "$packs" ] || mkdir -p "$packs"
-}
-
-pk-build-dir()
-{
-  if [ -z "$1" ]
-  then
-    echo "/build"
-  else
-    [ -d "$1" ] || { echo "Build dir doesn't exist" >&2; exit 1; }
-    readlink -f "$1"
-  fi
-}
-
-pk-check-installed()
-{
-  declare name="$1"
-  declare dir="$2"
-  [ -f "$dir/list/$name.list" ] && {
-    echo "$name is already installed"
-    exit 0
-  }
-  return 0
-}
-
-pk-root-dir()
-{
-  if [ "$1" = "/build" ]
-  then
-    echo "root"
-  else
-    echo "libs"
-  fi
-}
-
-# $1 - .tar.bz file
-# $2 - package name
-pk-get-ver()
-{
-  declare a
-  a=${1%.tar.bz2}
-  echo "${a#$2-}"
+    [ -d list ] || mkdir list
+    [ -d libs ] || mkdir libs
+    [ -d packages ] || mkdir packages
 }
 
 pk-find-desc()
@@ -261,7 +212,7 @@ pk-check-clash2()
   declare name="$1"
   declare dir="$2"
 
-  declare build_dir="$dir/"`pk-root-dir "$dir"`
+  declare build_dir="$dir/libs"
   declare file=`pk-local-tar "$name"`
 
   declare tmp_clash=`pk-make-tmp`
@@ -291,7 +242,7 @@ pk-extract2()
 
   declare list="$dir/list/$name.list"
   declare file=`pk-local-tar "$name"`
-  declare build_dir="$dir/"`pk-root-dir "$dir"`
+  declare build_dir="$dir/libs"
 
   pushd "$build_dir" >/dev/null
 

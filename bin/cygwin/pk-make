@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 . pk-common
 
 name="$1"
@@ -22,14 +20,13 @@ pk-new > "$tmp_files"
 
 [ -s "$tmp_files" ] || { echo "ERROR: no new files"; exit 1; }
 
-cd "$INSTALL_PATH"
-[ -d "$name" ] && { echo "ERROR: package named $name already exists"; exit 1; }
-mkdir "$name"
+[ -d "$INSTALL_PATH/$name" ] && { echo "ERROR: package named $name already exists"; exit 1; }
+mkdir "$INSTALL/$name"
 
 echo "Make package $name"
 
-cd "$BUILD_PATH"
+cd libs
 tar -cjf "$INSTALL_PATH/$name/$file" -T "$tmp_files" --transform="s,^.,$MINGW_PATH2,"
 cp "$desc_file" "$INSTALL_PATH/$name/desc"
-cp "$tmp_files" "$LIST_DIR/$name.list"
+cp "$tmp_files" "$name.list"
 pk-create-vers "$name" > "$INSTALL_PATH/$name/vers"

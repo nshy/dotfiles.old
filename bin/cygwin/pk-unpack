@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 . pk-common
 
 [ -d "$1" ] || { echo "$1 doesn't exist"; exit 1; }

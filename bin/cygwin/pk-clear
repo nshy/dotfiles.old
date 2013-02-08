@@ -1,9 +1,9 @@
 #!/bin/bash
 
-set -e
-
 . pk-common
 
-cd $BUILD_PATH
+pk-create-local-dirs
+
 files=`pk-new`
+cd libs
 [ -n "$files" ] && rm $files
