@@ -1,0 +1,15 @@
+#!/bin/bash
+
+. pk-common
+
+cd "$INSTALL_PATH"
+
+for file in my-*.vers
+do
+  desc=${file/.vers/.desc}
+  ver=`cat "$desc" | pk-print-ver`
+  name=${file%.vers}
+  file_pkg=${name%-$ver}
+
+  pk-check-package "$file_pkg" "" || echo
+done

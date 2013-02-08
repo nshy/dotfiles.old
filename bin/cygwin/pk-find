@@ -4,7 +4,7 @@ set -e
 
 . pk-common
 
-pkg=$1
+pkg="$1"
 
 for mirror in "$MIRROR_MAIN" "$MIRROR_PORTS"
 do
