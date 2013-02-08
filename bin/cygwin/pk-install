@@ -4,24 +4,28 @@ set -e
 
 . pk-common
 
-package="$1"
+name="$1"
 dir=`pk-build-dir "$2"`
 
+[ "$dir" != "/build" ] && pk-create-local-dirs "$dir"
 echo "Target dir is $dir"
 
-[ $dir" != /build" ] && pk-create-local-dirs "$dir"
+[ -z "$name" ] && { echo "ERROR: package not specified"; exit 1; }
 
-[ -z "$package" ] && { echo "ERROR: package not specified"; exit 1; }
-name=`pk-find-fun "$package" "$INSTALL_PATH" "tar.bz2"`
-
+pk_list_dir="$dir/list"
 tmp_deps=`pk-make-tmp`
-pk-check-installed "$name" "$dir"
-pk-make-dep-list "$name" "$dir" > "$tmp_deps"
+pk-make-dep-list2 "$name" pk-local-desc pk-install-status > "$tmp_deps"
+
 cat "$tmp_deps" | while read name
 do
-  file="$INSTALL_PATH/$name.tar.bz2"
-  pk-check-clash "$name" "$dir"
+  pk-check-clash2 "$name" "$dir"
   echo "install $name"
-  pk-extract "$name" "$dir"
-  [ "$dir" != "/build" ] && cp "$INSTALL_PATH/$name.tar.bz2" "$dir/packages"
+  pk-extract2 "$name" "$dir"
+  file=`pk-local-tar "$name"`
+  [ "$dir" != "/build" ] &&  {
+    mkdir "$dir/packages/$name"
+    cp -r "$INSTALL_PATH/$name"/{desc,*.tar.bz2} "$dir/packages/$name"
+  }
 done
+
+[ -s "$tmp_deps" ] || echo "Everything is installed"

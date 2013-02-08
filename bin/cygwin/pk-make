@@ -10,21 +10,25 @@ desc="$2"
 [ -z "$name" ] && { echo "ERROR: package not specified"; exit 1; }
 [ -z "$desc" ] && { echo "ERROR: description file not specified"; exit 1; }
 [ -f "$desc" ] || { echo "ERROR: description file not exits"; exit 1; }
-grep 'requires:' "$desc" >&/dev/null || { echo "ERROR: no deps in description"; exit 1; }
+grep 'requires:' "$desc" >&/dev/null || { echo "ERROR: no 'requires:' in description"; exit 1; }
+grep 'version:' "$desc" >&/dev/null || { echo "ERROR: no 'version:' in description"; exit 1; }
 
 desc_file=`readlink -f $desc`
-
-cd "$BUILD_PATH"
+ver=`cat "$desc_file" | pk-print-ver`
+file="$name-$ver.tar.bz2"
 
 tmp_files=`pk-make-tmp`
 pk-new > "$tmp_files"
 
-[ `stat -c %s "$tmp_files"` = '0' ] && { echo "WARNING: no new files"; exit 0; }
+[ -s "$tmp_files" ] || { echo "ERROR: no new files"; exit 1; }
+
+cd "$INSTALL_PATH"
+[ -d "$name" ] && { echo "ERROR: package named $name already exists"; exit 1; }
+mkdir "$name"
 
 echo "Make package $name"
 
 cd "$BUILD_PATH"
-tar -cjf "$INSTALL_PATH"/"$name".tar.bz2 -T "$tmp_files" \
-  --transform="s,^.,$MINGW_PATH2,"
-cp "$desc_file" "$INSTALL_PATH"/"$name".desc
-cp "$tmp_files" "$LIST_DIR"/"$name".list
+tar -cjf "$INSTALL_PATH/$name/$file" -T "$tmp_files" --transform="s,^.,$MINGW_PATH2,"
+cp "$desc_file" "$INSTALL_PATH/$name/desc"
+cp "$tmp_files" "$LIST_DIR/$name.list"

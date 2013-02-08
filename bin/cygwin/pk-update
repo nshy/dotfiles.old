@@ -11,12 +11,12 @@ cd "$INSTALL_PATH"
 clean=1
 
 # Update packages
-for file in mingw-*.tar.bz2
+for pkg in mingw-*
 do
-  desc=${file/.tar.bz2/.desc}
+  desc="$pkg/desc"
   ver=`cat "$desc" | pk-print-ver`
-  name=${file%.tar.bz2}
-  pkg=${name%-$ver}
+  file="$pkg/$pkg-$ver.tar.bz2"
+
   tmp_deps=`pk-make-tmp`
 
   # check package version
@@ -25,7 +25,7 @@ do
 
   pk-setup-package "$pkg"
   echo "$pkg updated $ver -> $ver2"
-  rm "$file" "$desc"
+  rm "$file"
 
   # check for new deps
   pk-make-dep-list2 "$pkg" pk-find-desc pk-setup-status > "$tmp_deps"

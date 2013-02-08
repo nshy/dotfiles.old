@@ -5,4 +5,5 @@ set -e
 . pk-common
 
 cd $BUILD_PATH
-rm `pk-new`
+files=`pk-new`
+[ -n "$files" ] && rm $files

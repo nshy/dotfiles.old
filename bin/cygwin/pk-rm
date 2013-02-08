@@ -4,16 +4,14 @@ set -e
 
 . pk-common
 
-package="$1"
+name="$1"
 dir=`pk-build-dir "$2"`
 
 echo "Target dir is $dir"
 
 build_dir="$dir/"`pk-root-dir "$dir"`
 
-[ -z "$package" ] && { echo "ERROR: package not specified"; exit 1; }
-
-name=`pk-find-fun "$package" "$dir/list" "list"`
+[ -z "$name" ] && { echo "ERROR: package not specified"; exit 1; }
 
 echo "remove $name"
 
@@ -24,4 +22,5 @@ rm `cat "$list_file"`
 rm "$list_file"
 
 # rm package from local dir if needed
-[ "$dir" != "/build" ] && rm "$dir/packages/$name.tar.bz2"
+file=`pk-pkg-to-tar "$name"`
+[ "$dir" != "/build" ] && rm "$dir/packages/$file"

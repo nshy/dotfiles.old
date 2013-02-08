@@ -20,9 +20,9 @@ do
   cp "$tmp_set" "$tmp_files"
 done
 
-if [ -s "$tmp_set" ]
+if [ -s "$tmp_files" ]
 then
-  cat "$tmp_set"
+  cat "$tmp_files"
 else
-  echo "No new files"
+  echo "No new files" >&2
 fi
