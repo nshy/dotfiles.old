@@ -9,12 +9,38 @@ dir=`readlink -f .`
 
 [ -z "$name" ] && { echo "ERROR: package not specified"; exit 1; }
 
-echo "remove $name"
+grep "^$name$" "$dir/installed.list" >/dev/null || {
+  echo "Package $name should be explicitly installed, not as a dependency"
+  exit 1
+}
 
-tmp_list=`pk-make-tmp`
-pk-print-tar-files "$name" "$dir/packages" > "$tmp_list"
+pk_install_dir="$dir"
+tmp_deps1=`pk-make-tmp`
+tmp_deps2=`pk-make-tmp`
+tmp_deps3=`pk-make-tmp`
+# find all deps for package being removed
+pk-make-dep-list2 "$name" pk-local-desc pk-false-status > "$tmp_deps1"
 
-cd libs
-rm `cat "$tmp_list"`
-cd ..
-rm -r "packages/$name"
+# find all orphaned packages
+for name2 in `cat "$dir/installed.list"`
+do
+  [ "$name2" = "$name" ] && continue
+  pk-make-dep-list2 "$name2" pk-local-desc pk-false-status > "$tmp_deps2"
+  # set complement
+  comm -23 <(sort "$tmp_deps1") <(sort "$tmp_deps2") > "$tmp_deps3"
+  cp "$tmp_deps3" "$tmp_deps1"
+done
+
+if [ -s "$tmp_deps1" ]
+then
+  # remove all orphaned packages
+  for name2 in `cat "$tmp_deps1"`
+  do
+    echo "remove $name2"
+    pk-rm-package "$name2" "$dir"
+  done
+else
+  echo "Nothing to remove actually, hold package as dependency"
+fi
+
+sed -ri -e "/$name/d" "$dir/installed.list"

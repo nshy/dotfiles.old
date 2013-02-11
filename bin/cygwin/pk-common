@@ -87,6 +87,11 @@ pk-install-status()
   [ -d "$pk_install_dir/packages/$1" ]
 }
 
+pk-false-status()
+{
+  return 1
+}
+
 pk-setup-package()
 {
   declare pkg="$1"
@@ -217,12 +222,17 @@ pk-check-sync()
 
 pk-local-desc()
 {
+  cat "$dir/packages/$1/desc"
+}
+
+pk-cache-desc()
+{
   cat "$INSTALL_PATH/$1/desc"
 }
 
 pk-pkg-to-tar()
 {
-  declare ver=`pk-local-desc "$name" | pk-print-ver`
+  declare ver=`pk-cache-desc "$name" | pk-print-ver`
   echo "$1-$ver.tar.bz2"
 }
 
@@ -313,4 +323,18 @@ pk-create-vers()
     declare v=`cat "$INSTALL_PATH/$dep/desc" | pk-print-ver`
     echo "$dep" "$v"
   done
+}
+
+pk-rm-package()
+{
+  declare name="$1"
+  declare dir="$2"
+  declare tmp_list=`pk-make-tmp`
+
+  pk-print-tar-files "$name" "$dir/packages" > "$tmp_list"
+
+  pushd "$dir/libs" >/dev/null
+  rm -f `cat "$tmp_list"`
+  popd >/dev/null
+  rm -r "$dir/packages/$name"
 }
