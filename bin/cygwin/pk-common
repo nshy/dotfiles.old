@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 INSTALL_PATH="/packages"
 MINGW_PATH="/usr/i686-pc-mingw32/sys-root/mingw"
@@ -164,7 +164,7 @@ pk-check-package()
   declare pkg="$1"
   declare tab="$2"
 
-  declare file="$pkg/vers"
+  declare file="$INSTALL_PATH/$pkg/vers"
   declare tab2="$tab  "
 
   declare tmp_diff=`pk-make-tmp`
@@ -183,6 +183,32 @@ pk-check-package()
   done
   [ -s "$tmp_diff" ] && {
     echo "$tab$pkg is out-of-date, diff:"
+    cat "$tmp_diff"
+    return 1
+  }
+  return 0
+}
+
+pk-check-sync()
+{
+  declare name="$1"
+  declare dir="$2"
+  declare tab="$3"
+
+  declare tab2="$tab  "
+  declare tmp_diff=`pk-make-tmp`
+
+
+  for dep in `cat "$INSTALL_PATH/$name/desc" | pk-print-deps`
+  do
+    [ ! -d "$dir/packages/$dep" ] && continue
+    declare v1=`cat "$INSTALL_PATH/$dep/desc" | pk-print-ver`
+    declare v2=`cat "$dir/packages/$dep/desc" | pk-print-ver`
+    [ "$v1" == "$v2" ] && continue
+    echo "$tab2$dep cache: $v1, local: $v2" >> "$tmp_diff"
+  done
+  [ -s "$tmp_diff" ] && {
+    echo "$tab$name is out-of-sync, diff:"
     cat "$tmp_diff"
     return 1
   }

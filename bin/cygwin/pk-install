@@ -10,19 +10,48 @@ pk-create-local-dirs
 
 dir=`readlink -f .`
 pk_install_dir="$dir"
+
+[ -d "$INSTALL_PATH/$name" ] || {
+  echo "Package $name doesn't exit in cache"
+  exit 1
+}
+
+grep "^$name$" "$dir/installed.list" >/dev/null && {
+  echo "Package $name is already installed"
+  exit 1
+}
+
+# check if package is out-of-date
+[[ $name =~ ^my- ]] && {
+  pk-check-package "$name" "" || {
+    echo "You probably need to rebuild package $name"
+    echo "Nothing is installed."
+    exit 1
+  }
+}
+
+# check if package is out-of-sync
+pk-check-sync "$name" "$dir" "" || {
+    echo "Try to update packages in local installation first"
+    echo "Nothing is installed."
+    exit 1
+}
+
 tmp_deps=`pk-make-tmp`
 pk-make-dep-list2 "$name" pk-local-desc pk-install-status > "$tmp_deps"
 
-# set -x
-cat "$tmp_deps" | while read name
+cat "$tmp_deps" | while read name2
 do
-  pk-check-clash2 "$name" "$dir" "$dir/packages"
-
-  echo "install $name"
-
-  pk-extract2 "$name" "$dir" "$INSTALL_PATH"
-  mkdir "$dir/packages/$name"
-  cp -r "$INSTALL_PATH/$name"/{desc,*.tar.bz2} "$dir/packages/$name"
+  pk-check-clash2 "$name2" "$dir" "$dir/packages"
 done
 
-[ -s "$tmp_deps" ] || echo "Everything is installed"
+cat "$tmp_deps" | while read name2
+do
+  echo "install $name2"
+
+  pk-extract2 "$name2" "$dir" "$INSTALL_PATH"
+  mkdir "$dir/packages/$name2"
+  cp -r "$INSTALL_PATH/$name2"/{desc,*.tar.bz2} "$dir/packages/$name2"
+done
+
+echo "$name" >> "$dir/installed.list"
