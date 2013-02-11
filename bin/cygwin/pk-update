@@ -1,0 +1,36 @@
+#!/bin/bash
+
+. pk-common
+
+dir=`readlink -f .`
+pk-create-local-dirs
+
+outdate=0
+# ./packages
+cd packages
+for name in my-*
+do
+  pk-check-package "$name" "" || outdate=1
+done
+[ "$outdate" -eq 1 ] && { echo "Update stopped, update your my-* packages first"; exit 1; }
+
+# ./
+cd ..
+# clear everything
+echo "All packages removed"
+rm -r libs/* packages/*
+
+tmp_deps=`pk-make-tmp`
+tmp_deps2=`pk-make-tmp`
+for name in `cat installed.list`
+do
+  pk-make-dep-list2 "$name" pk-cache-desc pk-false-status >> "$tmp_deps"
+  awk '!seen[$0]++' "$tmp_deps" > "$tmp_deps2"
+  cp "$tmp_deps2" "$tmp_deps"
+done
+
+for name in `cat "$tmp_deps"`
+do
+  echo "install $name"
+  pk-install-package "$name" "$dir"
+done

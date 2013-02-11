@@ -35,6 +35,7 @@ pk-create-local-dirs()
 {
     [ -d libs ] || mkdir libs
     [ -d packages ] || mkdir packages
+    [ -f installed.list ] || touch installed.list
 }
 
 pk-find-desc()
@@ -181,7 +182,7 @@ pk-check-package()
     then
       pk-check-package "$pkg" "$tab2" >> "$tmp_diff"
     else
-      declare v2=`pk-find-desc "$pkg" | pk-print-ver`
+      declare v2=`cat "$INSTALL_PATH/$pkg/desc" | pk-print-ver`
       [ "$v2" == "$v1" ] && continue
       echo "$tab2$pkg $v1 -> $v2" >> "$tmp_diff"
     fi
@@ -337,4 +338,14 @@ pk-rm-package()
   rm -f `cat "$tmp_list"`
   popd >/dev/null
   rm -r "$dir/packages/$name"
+}
+
+pk-install-package()
+{
+    declare name="$1"
+    declare dir="$2"
+
+    pk-extract2 "$name" "$dir" "$INSTALL_PATH"
+    mkdir "$dir/packages/$name"
+    cp -r "$INSTALL_PATH/$name"/{desc,*.tar.bz2} "$dir/packages/$name"
 }
