@@ -4,9 +4,8 @@
 
 pkg="$1"
 
-for mirror in "$MIRROR_MAIN" "$MIRROR_PORTS"
+for mirror in "$MAIN_LIST" "$PORTS_LIST"
 do
-      dir="/setup/`pk-mirror-dir "$mirror"`"
       awk -v query="mingw-.*$pkg" -f <(cat -<<'CODE'
         BEGIN {
           RS = "\n\n@ "
@@ -17,5 +16,5 @@ do
             print $1
         }
 CODE
-) "$dir/setup.ini"
+) "$mirror"
 done

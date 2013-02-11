@@ -2,8 +2,17 @@
 
 . pk-common
 
-apt-cyg -m "$MIRROR_PORTS" update
-apt-cyg -m "$MIRROR_MAIN" update
+declare -A names
+names["$MIRROR_MAIN"]="MAIN"
+names["$MIRROR_PORTS"]="PORTS"
+tmp_list=`pk-make-tmp`
+for mirror in "$MIRROR_MAIN" "$MIRROR_PORTS"
+do
+  echo "Update ${names[$mirror]} list"
+  curl -# "$mirror/setup.bz2" | bzcat 2>/dev/null >"$tmp_list"
+  # add tmp output to save list in case of download errors
+  cp "$tmp_list" "${url_to_file[$mirror]}"
+done
 
 cd "$INSTALL_PATH"
 
@@ -22,8 +31,8 @@ do
   ver2=`pk-find-desc "$pkg" | pk-print-ver`
   [ "$ver2" == "$ver" ] && continue
 
+  echo "updating $pkg  $ver -> $ver2"
   pk-setup-package "$pkg"
-  echo "$pkg updated $ver -> $ver2"
   rm "$file"
 
   # check for new deps
@@ -38,4 +47,4 @@ do
   clean=0
 done
 
-[ "$clean" -eq 1 ] && echo "Everything is up-to-date"
+[ "$clean" -eq 1 ] && echo "All packages are up-to-date"

@@ -1,12 +1,19 @@
 #!/bin/bash
 
-INSTALL_PATH="/packages"
+INSTALL_PATH="/mingw-cache/packages"
 MINGW_PATH="/usr/i686-pc-mingw32/sys-root/mingw"
 MINGW_PATH2="usr/i686-pc-mingw32/sys-root/mingw"
 MINGW_BASE=~/bin/cygwin/pk-mingw-list
 
 MIRROR_PORTS="ftp://ftp.cygwinports.org/pub/cygwinports"
 MIRROR_MAIN="http://linux.rz.ruhr-uni-bochum.de/download/cygwin"
+MAIN_LIST=/mingw-cache/main.list
+PORTS_LIST=/mingw-cache/ports.list
+
+declare -A url_to_file
+url_to_file["$MIRROR_MAIN"]="$MAIN_LIST"
+url_to_file["$MIRROR_PORTS"]="$PORTS_LIST"
+
 PK_TMP_FILES=`mktemp`
 
 shopt -s nullglob
@@ -26,10 +33,10 @@ pk-on-exit()
   rm "$PK_TMP_FILES"
 }
 
-pk-mirror-dir()
-{
-  echo "$1" | sed -e "s/:/%3a/g" -e "s:/:%2f:g"
-}
+# pk-mirror-dir()
+# {
+#   echo "$1" | sed -e "s/:/%3a/g" -e "s:/:%2f:g"
+# }
 
 pk-create-local-dirs()
 {
@@ -47,7 +54,6 @@ pk-find-desc()
   declare mirror
   for mirror in "$MIRROR_MAIN" "$MIRROR_PORTS"
   do
-    declare dir="/setup/`pk-mirror-dir "$mirror"`"
     tmp_script=`pk-make-tmp`
     cat >"$tmp_script" - <<'CODE'
       BEGIN {
@@ -67,8 +73,7 @@ pk-find-desc()
           exit 1
       }
 CODE
-  # cat "$tmp_script" >&2
-  awk -v package="$pkg" -f "$tmp_script" "$dir/setup.ini" && {
+  awk -v package="$pkg" -f "$tmp_script" ${url_to_file["$mirror"]} && {
     set -e
     pk_find_desc_mirror="$mirror"
     return
@@ -99,6 +104,7 @@ pk-setup-package()
   declare pkg="$1"
   declare tmp_desc=`pk-make-tmp`
   declare tmp_deps=`pk-make-tmp`
+  declare tmp_file=`pk-make-tmp`
 
   # find package description
   pk-find-desc "$pkg" > "$tmp_desc"
@@ -109,9 +115,10 @@ pk-setup-package()
 
   [ -d "$pkg" ] || mkdir "$pkg"
   # download new version
-  cp "../mirror/$file2" "$file2"
-  # wget -q -O "$file2" "$pk_find_desc_mirror/$path2"
+  # cp "../mirror/$file2" "$tmp_file"
+  curl -# "$pk_find_desc_mirror/$path2" >"$tmp_file"
   cp "$tmp_desc" "$desc2"
+  cp "$tmp_file" "$file2"
 
   # check the md5
   declare dig1=`cat "$tmp_desc" | awk '/^install: / { print $4; exit }'`
