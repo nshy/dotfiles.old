@@ -4,3 +4,38 @@
 
 apt-cyg -m "$MIRROR_PORTS" update
 apt-cyg -m "$MIRROR_MAIN" update
+
+cd "$INSTALL_PATH"
+
+clean=1
+
+# Update packages
+for pkg in mingw-*
+do
+  desc="$pkg/desc"
+  ver=`cat "$desc" | pk-print-ver`
+  file="$pkg/$pkg-$ver.tar.bz2"
+
+  tmp_deps=`pk-make-tmp`
+
+  # check package version
+  ver2=`pk-find-desc "$pkg" | pk-print-ver`
+  [ "$ver2" == "$ver" ] && continue
+
+  pk-setup-package "$pkg"
+  echo "$pkg updated $ver -> $ver2"
+  rm "$file"
+
+  # check for new deps
+  pk-make-dep-list2 "$pkg" pk-find-desc pk-setup-status > "$tmp_deps"
+
+  cat "$tmp_deps" | while read pkg_dep
+  do
+    echo "Setup $pkg_dep as dependency for $pkg"
+    pk-setup-package "$pkg_dep"
+  done
+
+  clean=0
+done
+
+[ "$clean" -eq 1 ] && echo "Everything is up-to-date"
