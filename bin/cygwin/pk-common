@@ -35,6 +35,7 @@ pk-create-local-dirs()
 {
     [ -d libs ] || mkdir libs
     [ -d packages ] || mkdir packages
+    [ -d scripts ] || mkdir scripts
     [ -f installed.list ] || touch installed.list
 }
 
