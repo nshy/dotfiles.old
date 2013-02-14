@@ -4,6 +4,10 @@
 
 pk-create-local-dirs
 
-files=`pk-new`
+tmp_files=`pk-make-tmp`
+pk-new > "$tmp_files"
 cd libs
-[ -n "$files" ] && rm $files
+cat "$tmp_files" | while read f
+do
+  rm "$f"
+done

@@ -21,7 +21,7 @@ pk-new > "$tmp_files"
 [ -s "$tmp_files" ] || { echo "ERROR: no new files"; exit 1; }
 
 [ -d "$INSTALL_PATH/$name" ] && { echo "ERROR: package named $name already exists"; exit 1; }
-mkdir "$INSTALL/$name"
+mkdir -p "$INSTALL_PATH/$name"
 
 echo "Make package $name"
 
