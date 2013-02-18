@@ -252,9 +252,13 @@ pk-print-tar-files()
 
   declare file=`pk-tar-file "$name" "$pack_dir"`
 
+  declare tmp_names=`pk-make-tmp`
+  declare tmp_types=`pk-make-tmp`
   set +e
-  tar tvj --transform="s,$MINGW_PATH2,.," --show-transformed-names -f "$file" \
-    --wildcards "$MINGW_PATH2/*" 2>/dev/null | grep -v '^d' | awk '{ print $6 }'
+  tar tj --transform="s,$MINGW_PATH2,.," --show-transformed-names -f "$file" \
+    --wildcards "$MINGW_PATH2/*" 2>/dev/null >"$tmp_names"
+  tar tvj -f "$file" --wildcards "$MINGW_PATH2/*" 2>/dev/null >"$tmp_types"
+  paste -d $'\n' "$tmp_types" "$tmp_names" | awk 'NR % 2 == 1 { d = $1 ~ /^d/ } (NR % 2 == 0) && !d { print $0 }'
   set -e
 }
 
@@ -343,7 +347,11 @@ pk-rm-package()
   pk-print-tar-files "$name" "$dir/packages" > "$tmp_list"
 
   pushd "$dir/libs" >/dev/null
-  rm -f `cat "$tmp_list"`
+
+  declare ifs_save="$IFS"
+  IFS=$'\n'
+  [ -s "$tmp_list" ] && rm `cat "$tmp_list"`
+  IFS="$ifs_save"
   popd >/dev/null
   rm -r "$dir/packages/$name"
 }
