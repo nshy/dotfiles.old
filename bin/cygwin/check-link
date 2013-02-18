@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -e
+
+on_exit()
+{
+  rm "$a"
+  rm "$s"
+  rm "$d"
+}
+
+trap on_exit EXIT
+
+a=`mktemp`
+s=`mktemp`
+d=`mktemp`
+
+find libs/lib/ -name '*.a' | sed -re 's/(.*)\.a/\1/' > "$a"
+sed -rne 's/(.*)\.dll/\1/p' "$a" | sort > "$d"
+sed -rne '/.*\.dll/!p' "$a" | sort > "$s"
+
+echo --------------
+echo "Only dynamic"
+echo --------------
+comm -23 "$d" "$s"
+echo --------------
+echo "Only static"
+echo --------------
+comm -13 "$d" "$s"
