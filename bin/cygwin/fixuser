@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+name0=`id -nu`
+name1=kolya
+
+sed -re "/^$name0/s/^$name0/$name1/;s/home\/$name0/home\/$name1/"
