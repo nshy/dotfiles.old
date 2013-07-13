@@ -1,0 +1,25 @@
+#!/bin/bash
+
+src="$1"
+dst="$2"
+
+[ -d "$src" ] || { echo "Usage: alac-to-aac SRC_DIR DST_DIR"; exit 1; }
+[ -d "$dst" ] || { echo "Usage: alac-to-aac SRC_DIR DST_DIR"; exit 1; }
+
+cd "`dirname "$src"`"
+
+for name in "`basename "$src"`"/**/
+do
+  mkdir -p "$dst/$name"
+done
+
+for name in "`basename "$src"`"/**/*
+do
+  if [ "${name##*.}" = m4a ]
+  then
+    echo "Processing $name"
+    ffmpeg -stats -loglevel error -i "$name" -strict -2 -vn -b:a 192k -c:a aac "$dst/$name"
+  else
+    cp --parents "$name" "$dst"
+  fi
+done
