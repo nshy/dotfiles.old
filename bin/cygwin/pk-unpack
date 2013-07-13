@@ -1,0 +1,16 @@
+#!/bin/bash
+
+. pk-common
+
+pk-create-local-dirs
+
+dir=`readlink -f .`
+
+[ -d "packages" ] || { "ERROR: `pwd` doesn't contain packages"; exit 1; }
+
+cd packages
+for name in *
+do
+  pk-extract2 "$name" "$dir" "$dir/packages"
+  echo "$name unpacked"
+done

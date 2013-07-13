@@ -1,0 +1,22 @@
+#!/bin/bash
+
+. pk-common
+
+pkg="$1"
+[ -z "$pkg" ] && { echo "ERROR: package not specified"; exit 1; }
+
+tmp_deps=`pk-make-tmp`
+
+# test for existence
+pk-find-desc "$pkg" 1>/dev/null
+
+pk-make-dep-list2 "$pkg" pk-find-desc pk-setup-status > "$tmp_deps"
+[ -s "$tmp_deps" ] || { echo "Package $pkg and its dependencies are already installed."; exit 0; }
+
+cd "$INSTALL_PATH"
+
+cat "$tmp_deps" | while read pkg
+do
+  echo "Setup $pkg"
+  pk-setup-package "$pkg"
+done

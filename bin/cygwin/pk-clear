@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. pk-common
+
+pk-create-local-dirs
+
+IFS=$'\n'
+files=`pk-new`
+cd libs
+[ -n "$files" ] && rm $files

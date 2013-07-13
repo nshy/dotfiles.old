@@ -26,7 +26,7 @@ then
   exit 1
 fi
 
-cygcheck "$exe" | \grep mingw | \
+cygcheck "$exe" | tail -n +3 | grep -v system32 | \
   sed 's/\\/\//g;s/e:\/cygwin//i' - | while read file
 do
   echo "$file"

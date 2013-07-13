@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. pk-common
+
+cd "$INSTALL_PATH"
+
+for pkg in my-*
+do
+  pk-check-package "$pkg" "" || echo
+done

@@ -1,0 +1,32 @@
+#!/bin/bash
+
+. pk-common
+
+pk-create-local-dirs
+dir=`readlink -f .`
+
+cd libs
+
+tmp_files=`pk-make-tmp`
+tmp_files2=`pk-make-tmp`
+
+# find all files in root
+find . -type f > "$tmp_files"
+
+# remove files from installed packages
+cd ../packages
+tmp_set=`pk-make-tmp`
+for name in *
+do
+  # set complement - files int $tmp_files that are not in $file
+  pk-print-tar-files "$name" "$dir/packages" > "$tmp_files2"
+  comm -23 <(sort "$tmp_files") <(sort "$tmp_files2") > "$tmp_set"
+  cp "$tmp_set" "$tmp_files"
+done
+
+if [ -s "$tmp_files" ]
+then
+  cat "$tmp_files"
+else
+  echo "No new files" >&2
+fi

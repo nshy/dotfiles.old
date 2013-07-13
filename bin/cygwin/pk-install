@@ -1,0 +1,62 @@
+#!/bin/bash
+
+. pk-common
+
+name="$1"
+
+pk-create-local-dirs
+
+[ -z "$name" ] && { echo "ERROR: package not specified"; exit 1; }
+
+dir=`readlink -f .`
+pk_install_dir="$dir"
+
+[ -d "$INSTALL_PATH/$name" ] || {
+  echo "Package $name doesn't exit in cache"
+  exit 1
+}
+
+grep "^$name$" "$dir/installed.list" >/dev/null && {
+  echo "Package $name is already installed"
+  exit 1
+}
+
+# check if package is out-of-date
+[[ $name =~ ^my- ]] && {
+  pk-check-package "$name" "" || {
+    echo "You probably need to rebuild package $name"
+    echo "Nothing is installed."
+    exit 1
+  }
+}
+
+# check if package is out-of-sync
+pk-check-sync "$name" "$dir" "" || {
+    echo "Try to update packages in local installation first"
+    echo "Nothing is installed."
+    exit 1
+}
+
+tmp_deps=`pk-make-tmp`
+pk-make-dep-list2 "$name" pk-cache-desc pk-install-status > "$tmp_deps"
+
+cat "$tmp_deps" | while read name2
+do
+  pk-check-clash2 "$name2" "$dir" "$dir/packages"
+done
+
+cp ~/bin/cygwin/{pk-common,pk-unpack} "$dir/scripts"
+
+if [ -s "$tmp_deps" ]
+then
+  cat "$tmp_deps" | while read name2
+  do
+    echo "install $name2"
+    pk-install-package "$name2" "$dir"
+  done
+else
+  echo "Nothing to install actually, package already installed as dependency"
+fi
+
+echo "$name" >> "$dir/installed.list"
+
