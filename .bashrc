@@ -79,5 +79,5 @@ alias mark="mark_mark"
 alias go="mark_go"
 alias dirs="mark_ls"
 
-. .bash/vimfifo
+# . .bash/vimfifo
 alias vimfifo="vimfifo_echo"

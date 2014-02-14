@@ -212,59 +212,59 @@ augroup spaces
               \ softtabstop=8 noexpandtab
 augroup END
 
-function! s:add_bad_whitespace_matches()
-  if exists("w:bad_ts")
-    return
-  endif
-  " Mark mixing tab and spaces
-  let w:bad_ts = matchadd("BadWhitespace", '\t ')
-  let w:bad_st = matchadd("BadWhitespace", ' \t')
-  " Mark trailing whitespaces
-  let w:bad_trail = matchadd("BadWhitespace", '\s\+$')
-endfunction
+" function! s:add_bad_whitespace_matches()
+"   if exists("w:bad_ts")
+"     return
+"   endif
+"   " Mark mixing tab and spaces
+"   let w:bad_ts = matchadd("BadWhitespace", '\t ')
+"   let w:bad_st = matchadd("BadWhitespace", ' \t')
+"   " Mark trailing whitespaces
+"   let w:bad_trail = matchadd("BadWhitespace", '\s\+$')
+" endfunction
 
-function! s:rm_bad_whitespace_matches()
-  call matchdelete(w:bad_ts)
-  call matchdelete(w:bad_st)
-  call matchdelete(w:bad_trail)
-  unlet w:bad_ts
-  unlet w:bad_st
-  unlet w:bad_trail
-endfunction
+" function! s:rm_bad_whitespace_matches()
+"   call matchdelete(w:bad_ts)
+"   call matchdelete(w:bad_st)
+"   call matchdelete(w:bad_trail)
+"   unlet w:bad_ts
+"   unlet w:bad_st
+"   unlet w:bad_trail
+" endfunction
 
-function! s:i_mode_bad_whitespace_matches()
-  if !exists("w:bad_trail")
-    return
-  endif
-  call matchdelete(w:bad_trail)
-  let w:bad_trail = matchadd("BadWhitespace", '\s\+\%#\@<!$')
-endfunction
+" function! s:i_mode_bad_whitespace_matches()
+"   if !exists("w:bad_trail")
+"     return
+"   endif
+"   call matchdelete(w:bad_trail)
+"   let w:bad_trail = matchadd("BadWhitespace", '\s\+\%#\@<!$')
+" endfunction
 
-function! s:n_mode_bad_whitespace_matches()
-  if !exists("w:bad_trail")
-    return
-  endif
-  call matchdelete(w:bad_trail)
-  let w:bad_trail = matchadd("BadWhitespace", '\s\+$')
-endfunction
+" function! s:n_mode_bad_whitespace_matches()
+"   if !exists("w:bad_trail")
+"     return
+"   endif
+"   call matchdelete(w:bad_trail)
+"   let w:bad_trail = matchadd("BadWhitespace", '\s\+$')
+" endfunction
 
 " order is significant!
 colorscheme wombat256
-call s:add_bad_whitespace_matches()
+" call s:add_bad_whitespace_matches()
 
 " Mark bad cases of spaces
-augroup bad-spaces
-  autocmd!
+" augroup bad-spaces
+"   autocmd!
 
-  " On for all buffers except */doc/*
-  autocmd WinEnter * call s:add_bad_whitespace_matches()
-  autocmd BufEnter * call s:add_bad_whitespace_matches()
-  autocmd BufEnter */doc/* call s:rm_bad_whitespace_matches()
+"   " On for all buffers except */doc/*
+"   autocmd WinEnter * call s:add_bad_whitespace_matches()
+"   autocmd BufEnter * call s:add_bad_whitespace_matches()
+"   autocmd BufEnter */doc/* call s:rm_bad_whitespace_matches()
 
-  " Disable mark trailing whitespaces when in insert mode
-  autocmd InsertEnter * call s:i_mode_bad_whitespace_matches()
-  autocmd InsertLeave * call s:n_mode_bad_whitespace_matches()
-augroup END
+"   " Disable mark trailing whitespaces when in insert mode
+"   autocmd InsertEnter * call s:i_mode_bad_whitespace_matches()
+"   autocmd InsertLeave * call s:n_mode_bad_whitespace_matches()
+" augroup END
 
 
 
