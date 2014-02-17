@@ -50,7 +50,9 @@ set wildmode=longest,list
 set hidden
 set nobackup
 set noswapfile
-set undofile
+if exists('+undofile')
+  set undofile
+endif
 set switchbuf=useopen
 " hints from coming home to vim
 set gdefault
@@ -198,10 +200,12 @@ augroup custom_syntax
 augroup END
 
 " set color column
-augroup color-column
-  autocmd!
-  autocmd FileType ruby,sh,vim,c,h,make setlocal colorcolumn=80
-augroup END
+if exists('+colorcolumn')
+  augroup color-column
+    autocmd!
+    autocmd FileType ruby,sh,vim,c,h,make setlocal colorcolumn=80
+  augroup END
+endif
 
 " set spaces
 augroup spaces
