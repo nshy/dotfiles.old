@@ -3,8 +3,7 @@
 # Check for an interactive session
 [[ "$-" != *i* ]] && return
 
-export PS1='\W $ '
-PATH=$PATH:~/bin
+export PS1='[\u@\h \W]\$ '
 
 export EDITOR="vim"
 export LC_CTYPE="ru_RU.utf8"
