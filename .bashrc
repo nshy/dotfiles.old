@@ -45,17 +45,8 @@ alias lsd='ls -F1 --group-directories-first'
 # FRSX comes from man git-config
 export LESS='-iFRSX'
 
-# man options
-# TODO need a better solution
-#alias mang="MANPATH=${MINGW}/share/man man"
-
 # no programmable completion for now
-complete -r
-
-# CYGWIN specific
-[[ $(uname) =~ CYGWIN ]] && . .cygwin/bashrc
-# Arch specific
-[[ $(uname) =~ Linux ]] && PATH=$PATH:~/.gem/ruby/1.9.1/bin
+# complete -r
 
 # history options
 HISTCONTROL=ignoreboth:ignorespace
@@ -63,21 +54,7 @@ HISTFILESIZE=10000
 HISTSIZE=10000
 HISTIGNORE='ls::fg:history:'
 
-# command aliases
-alias usb="mount /mnt/usb"
-alias nousb="umount /mnt/usb"
-alias rsyncp="rsync --progress"
-
 # navigation aliases
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
-
-# mark plugin
-. marks
-alias mark="mark_mark"
-alias go="mark_go"
-alias dirs="mark_ls"
-
-# . .bash/vimfifo
-alias vimfifo="vimfifo_echo"
