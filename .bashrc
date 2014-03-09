@@ -6,9 +6,8 @@
 export PS1='[\u@\h \W]\$ '
 
 export EDITOR="vim"
-export LC_CTYPE="ru_RU.utf8"
-export LC_TIME="ru_RU.utf8"
-export LC_COLLATE="ru_RU.utf8"
+export LANG="ru_RU.utf8"
+export LC_MESSAGES="en_US.utf8"
 export CTAGS="--c-kinds=+px"
 
 # Set glob options
